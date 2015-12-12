@@ -13,6 +13,13 @@ class MatchRoom extends Room {
     options.updateInterval = 1000 / PATCH_RATE
 
     super(options, {
+      map: [
+        0, 0, 0, 0, 0,
+        0, 1, 1, 1, 0,
+        0, 1, 0, 1, 0,
+        0, 1, 1, 1, 0,
+        0, 0, 0, 0, 0
+      ],
       players: {},
       items: []
     })
@@ -53,10 +60,10 @@ class MatchRoom extends Room {
       , keyStatus = data[1]
 
     if (key === 0) {
-      this.playerProps[client.id].left = keyStatus
+      this.playerProps[ client.id ].left = keyStatus
 
     } else if (key === 1) {
-      this.playerProps[client.id].right = keyStatus
+      this.playerProps[ client.id ].right = keyStatus
     }
   }
 
@@ -83,11 +90,11 @@ class MatchRoom extends Room {
 
     var origin = transform.getOrigin();
     var rotation = transform.getRotation();
+
+    // update state for next broadcast
     this.state.players[clientId].x = origin.x()
     this.state.players[clientId].y = origin.y()
     this.state.players[clientId].angle = rotation.z()
-
-    console.log("Update player state: ", origin.x(), origin.y(), rotation.z())
 
     if (props.left === 1) {
       // accelerate left

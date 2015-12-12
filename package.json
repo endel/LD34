@@ -25,7 +25,9 @@
   },
   "dependencies": {
     "colyseus.js": "^0.1.8",
+    "keycode.js": "0.0.1",
     "lerp": "^1.0.3",
-    "pixi.js": "^3.0.8"
+    "pixi.js": "^3.0.8",
+    "tiny-emitter": "^1.0.2"
   }
 }

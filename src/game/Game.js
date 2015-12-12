@@ -1,4 +1,5 @@
 import PIXI from 'pixi.js';
+import Network from './Network'
 import Physics from './Physics';
 import Quad from './Quad';
 import Player from './Player';
@@ -6,6 +7,8 @@ import Player from './Player';
 export default class Game extends PIXI.Container {
   constructor() {
     super();
+
+    this.network = new Network();
     this.physics = new Physics();
 
     this.world = new PIXI.Container();
@@ -17,10 +20,38 @@ export default class Game extends PIXI.Container {
     this.camera = {x:0, y:0};
     this.entities = [];
 
-    this.player = new Player();
-    this.addEntity(this.player);
-    this.player.position.x = this.camera.x = 0;
-    this.player.position.y = this.camera.y = 0;
+    this.network = new Network();
+    this.network.on('setup', this.onSetup.bind(this))
+    this.network.on('update', this.onUpdateState.bind(this))
+
+    this.playersByClientId = {}
+  }
+
+  onSetup (data) {
+    this.loadMap(data.map)
+
+    if (data.players) {
+      for (var clientId in data.players) {
+        this.playersByClientId[ clientId ] = new Player()
+        this.playersByClientId[ clientId ].position.x = data.players[ clientId ].x
+        this.playersByClientId[ clientId ].position.y = data.players[ clientId ].y
+        this.playersByClientId[ clientId ].rotation = data.players[ clientId ].angle
+
+        if (clientId == this.network.clientId) {
+          this.player = this.playersByClientId[ clientId ]
+        }
+
+        this.addEntity(this.playersByClientId[ clientId ])
+      }
+    }
+  }
+
+  onUpdateState (newState) {
+    for (var clientId in newState.players) {
+      this.playersByClientId[ clientId ].position.x = newState.players[ clientId ].x
+      this.playersByClientId[ clientId ].position.y = newState.players[ clientId ].y
+      this.playersByClientId[ clientId ].rotation = newState.players[ clientId ].angle
+    }
   }
 
   addEntity(entity) {
@@ -28,10 +59,10 @@ export default class Game extends PIXI.Container {
     this.entities.push(entity);
   }
 
-  setup(map) {
+  loadMap(map) {
     var len = map.length;
     var cols = Math.sqrt(len);
-    var size = 256;
+    var size = 128;
     for (var i = 0; i < len; i++) {
       var type = map[i];
       var px = Math.floor(i%cols);
@@ -47,11 +78,46 @@ export default class Game extends PIXI.Container {
   }
 
   update(delta) {
-    this.camera.x -= (this.camera.x - this.player.position.x)*0.5;
-    this.camera.y -= (this.camera.y - this.player.position.y)*0.5;
+    // player may not have connected yet
+    if (this.player) {
+      this.camera.x -= (this.camera.x - this.player.position.x)*0.5;
+      this.camera.y -= (this.camera.y - this.player.position.y)*0.5;
+    }
+
     var i = this.entities.length;
     while (i--) {
       this.entities[i].update(delta);
     }
+  }
+
+  keyDown(name) {
+    var key = null
+
+    if (name == "LEFT" || name == "A") {
+      key = 0
+    } else if (name == "RIGHT" || name == "D") {
+      key = 1
+    }
+
+    if (key) {
+      console.log('down', name);
+      this.network.send([key, 1])
+    }
+  }
+
+  keyUp(name) {
+    var key = null
+
+    if (name == "LEFT" || name == "A") {
+      key = 0
+    } else if (name == "RIGHT" || name == "D") {
+      key = 1
+    }
+
+    if (key) {
+      console.log('up', name);
+      this.network.send([key, 0])
+    }
+
   }
 }

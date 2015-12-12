@@ -1,36 +1,31 @@
-module.exports =
+import Colyseus from 'colyseus.js';
+import EventEmitter from 'tiny-emitter'
 
-var colyseus = new Colyseus("ws://localhost:3553")
-var room = colyseus.join('map1')
-  , players = {}
+export default class Network extends EventEmitter {
 
-room.on('setup', function(data) {
-  for(var clientId in data.players) {
-    let player = new PIXI.Graphics();
-    players[clientId] = player
+  constructor () {
+    super()
 
-    player.beginFill(0xFFFF00);
-    player.lineStyle(1, 0xFF0000);
-    player.drawRect(0, 0, 10, 10);
-    player.x = data.players[clientId].x
-    player.y = data.players[clientId].y
-    player.rotation = data.players[clientId].rotation
-    stage.container.addChild(player);
+    this.colyseus = new Colyseus("ws://localhost:3553")
+
+    this.room = this.colyseus.join('map1')
+
+    // this.onSetupRoom.bind(this)
+    this.room.on('setup', initialState => this.emit('setup', initialState))
+
+    //  this.onPatchRoom.bind(this)
+    this.room.on('patch', patches => this.emit('patch', patches))
+
+    // this.onUpdateRoom.bind(this)
+    this.room.on('update', newState => this.emit('update', newState))
   }
 
-  console.log("initial data!", data)
-})
-
-room.on('update', function(state) {
-  // TODO: move to patches
-  for (var clientId in state.players) {
-    players[ clientId ].x = state.players[ clientId ].x
-    players[ clientId ].y = state.players[ clientId ].y
-    players[ clientId ].rotation = state.players[ clientId ].angle
+  get clientId () {
+    return this.colyseus.id
   }
-})
 
-room.on('patch', function(patches) {
-  console.log("patched ", patches)
-})
+  send (data) {
+    this.colyseus.send(data)
+  }
 
+}
