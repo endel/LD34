@@ -1,5 +1,8 @@
 import Stage from './tools/Stage';
+import Game from './game/Game';
 
+
+var lastTime = 0;
 var stage = new Stage({
   targetWidth: 800,
   targetHeight: 500,
@@ -7,4 +10,23 @@ var stage = new Stage({
   height: 500
 });
 
-console.log('main');
+var game = new Game();
+stage.container.addChild(game);
+game.setup([
+  0, 0, 0, 0, 0,
+  0, 1, 1, 1, 0,
+  0, 1, 0, 1, 0,
+  0, 1, 1, 1, 0,
+  0, 0, 0, 0, 0
+]);
+
+render(0);
+
+function render(time) {
+  'use strict';
+  var delta = time - lastTime;
+  game.update(delta);
+  stage.render();
+  lastTime = time;
+  requestAnimationFrame(render);
+}
