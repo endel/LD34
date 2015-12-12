@@ -33,8 +33,8 @@ export default class Game extends PIXI.Container {
     if (data.players) {
       for (var clientId in data.players) {
         this.playersByClientId[ clientId ] = new Player();
-        this.playersByClientId[ clientId ].position.x = data.players[ clientId ].x;
-        this.playersByClientId[ clientId ].position.y = data.players[ clientId ].y;
+        this.playersByClientId[ clientId ].x = data.players[ clientId ].x;
+        this.playersByClientId[ clientId ].y = data.players[ clientId ].y;
         this.playersByClientId[ clientId ].rotation = data.players[ clientId ].rotation;
 
         if (clientId === this.network.clientId) {
@@ -49,9 +49,9 @@ export default class Game extends PIXI.Container {
 
   onUpdateState (newState) {
     for (var clientId in newState.players) {
-      this.playersByClientId[ clientId ].position.x = newState.players[ clientId ].x;
-      this.playersByClientId[ clientId ].position.y = newState.players[ clientId ].y;
-      this.playersByClientId[ clientId ].rotation = newState.players[ clientId ].rotation;
+      this.playersByClientId[ clientId ].x = newState.players[ clientId ].x;
+      this.playersByClientId[ clientId ].y = newState.players[ clientId ].y;
+      this.playersByClientId[ clientId ].angle = newState.players[ clientId ].rotation;
     }
     console.log("update state")
   }
