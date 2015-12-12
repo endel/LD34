@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import shell from 'shelljs';
 import chokidar from 'chokidar';
+import spritesheet from 'spritesheet-js';
 
 var taskname = process.argv[2] || 'release';
 var taskmap = {
@@ -12,6 +13,7 @@ run(taskmap[taskname]);
 
 async function release() {
   await run(clean);
+  await run(atlas);
   await run(copy);
   await run(css);
   await run(js);
@@ -38,6 +40,17 @@ async function css() {
   shell.exec(cmd);
 }
 
+async function atlas() {
+  fs.emptyDirSync('release/atlas');
+  var list = [];
+  forEach('res/atlas/', function(item, path) {
+    list.push(new Promise(function(resolve, reject) {
+      createSpritesheet(item, path, resolve, reject);
+    }));
+  });
+  return Promise.all(list);
+}
+
 async function js() {
   fs.emptyDirSync('release/js');
   var cmd = 'browserify src/main.js -t [babelify --stage 0] | uglifyjs -mc > release/js/main.js';
@@ -45,26 +58,56 @@ async function js() {
 }
 
 async function watch() {
+  run(atlas);
   run(copy);
   fs.emptyDirSync('release/js');
   fs.emptyDirSync('release/css');
   var cmdJs = 'watchify src/main.js -t [babelify --stage 0] -o release/js/main.js -d -v';
   var cmdCss = 'stylus res/styles/main.styl --out release/css/main.css -w';
   var cmdServer = 'http-server release -p 8080 -s';
+  watchDir('res/atlas', atlas);
   watchDir('res/html', copy);
   shell.exec(`${cmdJs} & ${cmdCss} & ${cmdServer}`, {async:true});
 }
 
 // TOOLS -------------------------------------------------
 
+function createSpritesheet(item, path, onComplete, onError) {
+  var opt = {
+    name: item,
+    format: 'json',
+    path: 'release/atlas',
+    format: 'json',
+    padding: 1,
+    trim: true,
+    powerOfTwo: false
+  };
+
+  spritesheet(path + '/**/*.png', opt, function (err) {
+    if (err) {
+      onError(err);
+    } else {
+      onComplete();
+    }
+  });
+}
+
 function watchDir(dir, callback) {
+  var running = false;
   var watcher = chokidar.watch(dir, {
     ignored: /[\/\\]\./,
-    persistent: true
+    persistent: true,
+    recursive: true
   });
-  watcher.on('change', function() {
+  watcher.on('ready', function() {
+    watcher.on('change', _cb);
+    watcher.on('add', _cb);
+    watcher.on('unlink', _cb);
+  });
+
+  function _cb() {
     run(callback);
-  });
+  }
 }
 
 function forEach(dir, fn) {
