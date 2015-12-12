@@ -13,7 +13,6 @@ export default class Track extends PIXI.Container {
   }
 
   setup(config) {
-    console.log(config);
     var map = config.map;
     var len = map.length;
     var cols = config.cols;

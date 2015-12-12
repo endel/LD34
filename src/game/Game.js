@@ -3,6 +3,7 @@ import Network from './Network';
 import Physics from './Physics';
 import Quad from './Quad';
 import Player from './Player';
+import DummyPlayer from './DummyPlayer';
 import Track from './Track';
 
 export default class Game extends PIXI.Container {
@@ -15,7 +16,7 @@ export default class Game extends PIXI.Container {
     this.world = new PIXI.Container();
     this.addChild(this.world);
 
-    this.camera = {x:0, y:0};
+    this.camera = {x:0, y:0, target:null};
     this.entities = [];
 
     this.network = new Network();
@@ -25,6 +26,10 @@ export default class Game extends PIXI.Container {
 
     this.track = new Track('long');
     this.world.addChild(this.track);
+
+    this.dummy = new DummyPlayer();
+    this.addEntity(this.dummy);
+    this.camera.target = this.dummy;
   }
 
   onSetup (data) {
@@ -39,6 +44,7 @@ export default class Game extends PIXI.Container {
 
         if (clientId === this.network.clientId) {
           this.player = this.playersByClientId[ clientId ];
+          // this.camera.target = this.player;
         }
 
         this.addEntity(this.playersByClientId[ clientId ]);
@@ -59,30 +65,15 @@ export default class Game extends PIXI.Container {
     this.entities.push(entity);
   }
 
-  loadMap(map) {
-    var len = map.length;
-    var cols = Math.sqrt(len);
-    var size = 128;
-    for (var i = 0; i < len; i++) {
-      var type = map[i];
-      var px = Math.floor(i%cols);
-      var py = Math.floor(i/cols);
-      var color = type ? 0x3333FF : 0x33FF33;
-      var quad = new Quad(color, size, size, 0, 0);
-      this.scenario.addChild(quad);
-      quad.position.x = px*size;
-      quad.position.y = py*size;
-    }
-    this.scenario.position.x = -this.scenario.width/2;
-    this.scenario.position.y = -this.scenario.height/2;
-  }
-
   update(delta) {
     // player may not have connected yet
-    if (this.player) {
-      this.camera.x -= (this.camera.x - this.player.position.x)*0.5;
-      this.camera.y -= (this.camera.y - this.player.position.y)*0.5;
+    if (this.camera.target) {
+      this.camera.x -= (this.camera.x - this.camera.target.position.x)*0.5;
+      this.camera.y -= (this.camera.y - this.camera.target.position.y)*0.5;
     }
+
+    this.world.position.x = -this.camera.x;
+    this.world.position.y = -this.camera.y;
 
     var i = this.entities.length;
     while (i--) {
@@ -99,7 +90,7 @@ export default class Game extends PIXI.Container {
       key = 1;
     }
 
-    if (key) {
+    if (this.player && key) {
       console.log('down', name);
       this.network.send([key, 1]);
     }
@@ -114,10 +105,13 @@ export default class Game extends PIXI.Container {
       key = 1;
     }
 
-    if (key) {
+    if (this.player && key !== null) {
       console.log('up', name);
       this.network.send([key, 0]);
     }
 
+    if (this.dummy && key !== null) {
+      this.dummy.impulse(key === 0 ? 1 : -1);
+    }
   }
 }
