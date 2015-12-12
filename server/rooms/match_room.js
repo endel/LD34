@@ -2,6 +2,7 @@
 
 var Room = require('colyseus').Room
   , ClockTimer = require('clock-timer.js')
+  , Ammo = require('../../ammo')
 
 const TICK_RATE = 30
     , PATCH_RATE = 20
@@ -13,9 +14,10 @@ class MatchRoom extends Room {
 
     super(options, {
       players: {},
+      items: []
     })
 
-    this.playerKeys = {}
+    this.playerProps = {}
 
     this.clock = new ClockTimer()
     this.tickInterval = setInterval(this.tick.bind(this), 1000 / TICK_RATE)
@@ -26,12 +28,19 @@ class MatchRoom extends Room {
   }
 
   onJoin (client, options) {
+    this.state.players[ client.id ] = {
+      x: 0,
+      y: 0,
+      angle: 0
+    }
+
     this.playerProps[client.id] = {
       left: 0,
       right: 0,
-      angle: 0,
-      velocity: 0
+      speed: 0
     }
+
+    this.sendState(client)
   }
 
   onMessage (client, data) {
