@@ -22,6 +22,7 @@ class MatchRoom extends Room {
         0, 0, 0, 0, 0
       ],
       players: {},
+      leaderboard: [],
       items: []
     })
 
@@ -53,13 +54,16 @@ class MatchRoom extends Room {
 
   onMessage (client, data) {
     let key = data[0]
-      , keyStatus = data[1]
+      , value = data[1]
 
-    if (key === 0) {
-      this.players[ client.id ].left = keyStatus
+    if (key == 'name') {
+      this.state.players[ client.id ].name = value
+
+    } else if (key === 0) {
+      this.players[ client.id ].left = value
 
     } else if (key === 1) {
-      this.players[ client.id ].right = keyStatus
+      this.players[ client.id ].right = value
     }
   }
 

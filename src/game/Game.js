@@ -7,6 +7,7 @@ import Track from './Track';
 import Camera from './Camera';
 
 export default class Game extends PIXI.Container {
+
   constructor() {
     super();
 

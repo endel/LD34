@@ -1,27 +1,37 @@
 import Colyseus from 'colyseus.js';
 import EventEmitter from 'tiny-emitter'
 
+import NameForm from '../dom/NameForm';
+
 export default class Network extends EventEmitter {
 
   constructor (players) {
     super()
 
-    this.colyseus = new Colyseus("ws://localhost:3553")
+    this.colyseus = new Colyseus(`ws://${ location.hostname }:3553`)
     this.players = players
 
     this.room = this.colyseus.join('map1')
 
     // this.onSetupRoom.bind(this)
-    this.room.on('setup', initialState => this.emit('setup', initialState))
+    this.room.on('setup', this.onSetup.bind(this))
     this.room.on('patch', this.onPatchState.bind(this))
 
     // this.onUpdateRoom.bind(this)
     this.room.on('update', newState => this.emit('update', newState))
-
   }
 
   get clientId () {
     return this.colyseus.id
+  }
+
+  onSetup (initialState) {
+    for (var clientId in initialState.players) {
+      if (clientId == this.clientId) {
+        this.nameForm = new NameForm(this, initialState.players[ clientId ].name)
+      }
+    }
+    this.emit('setup', initialState)
   }
 
   onPatchState (patches) {
@@ -33,6 +43,13 @@ export default class Network extends EventEmitter {
       } else if (patch.op==='replace' && patch.path.indexOf("/players/") === 0) {
         let [_, clientId, property] = patch.path.match(/\/players\/(.*)\/(.*)/)
         this.players[ clientId ][ property ] = patch.value
+
+        console.log(property, patch.value)
+
+        // close name change modal
+        if (clientId === this.clientId && property === 'name') {
+          this.nameForm.close()
+        }
 
       } else if (patch.op==='remove' && patch.path.indexOf("/players/") === 0) {
         // on user disconnect
