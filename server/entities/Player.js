@@ -38,7 +38,6 @@ class Player {
 		this.torque = math.clamp(this.torque, -0.12, 0.12);
 		this.acceleration += 1;
 		this.acceleration = math.clamp(this.acceleration, -5, 5);
-    console.log("impulse", side)
 	}
 }
 
