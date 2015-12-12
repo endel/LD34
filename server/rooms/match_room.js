@@ -36,6 +36,8 @@ class MatchRoom extends Room {
   }
 
   onJoin (client, options) {
+    console.log(client.id, 'joined')
+
     var x = 10
       , y = 10
 
@@ -45,7 +47,7 @@ class MatchRoom extends Room {
       angle: 0
     }
 
-    this.playerProps[client.id] = {
+    this.playerProps[ client.id ] = {
       left: 0,
       right: 0,
       speed: 0,
@@ -65,6 +67,17 @@ class MatchRoom extends Room {
     } else if (key === 1) {
       this.playerProps[ client.id ].right = keyStatus
     }
+  }
+
+  onLeave (client) {
+    console.log(client.id, "leaved")
+
+    // remove rigid body from simulation
+    this.simulation.remove(this.playerProps[ client.id ].body)
+
+    // remove player references
+    delete this.state.players[ client.id ]
+    delete this.playerProps[ client.id ]
   }
 
   tick () {
@@ -98,10 +111,14 @@ class MatchRoom extends Room {
 
     if (props.left === 1) {
       // accelerate left
+      this.simulation.applyForce(body, {x: 10, y: 5}, {x: 10, y: 10})
+      console.log("Apply force left")
     }
 
     if (props.right === 1) {
       // accelerate right
+      console.log("Apply force right")
+      this.simulation.applyForce(body, {x: -10, y: 5}, {x: -10, y: 10})
     }
   }
 

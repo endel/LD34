@@ -8,7 +8,6 @@ export default class Game extends PIXI.Container {
   constructor() {
     super();
 
-    this.network = new Network();
     this.physics = new Physics();
 
     this.world = new PIXI.Container();
@@ -30,19 +29,18 @@ export default class Game extends PIXI.Container {
   onSetup (data) {
     this.loadMap(data.map)
 
-    if (data.players) {
-      for (var clientId in data.players) {
-        this.playersByClientId[ clientId ] = new Player()
-        this.playersByClientId[ clientId ].position.x = data.players[ clientId ].x
-        this.playersByClientId[ clientId ].position.y = data.players[ clientId ].y
-        this.playersByClientId[ clientId ].rotation = data.players[ clientId ].angle
+    console.log(data.players)
+    for (var clientId in data.players) {
+      this.playersByClientId[ clientId ] = new Player()
+      this.playersByClientId[ clientId ].position.x = data.players[ clientId ].x
+      this.playersByClientId[ clientId ].position.y = data.players[ clientId ].y
+      this.playersByClientId[ clientId ].rotation = data.players[ clientId ].angle
 
-        if (clientId == this.network.clientId) {
-          this.player = this.playersByClientId[ clientId ]
-        }
-
-        this.addEntity(this.playersByClientId[ clientId ])
+      if (clientId == this.network.clientId) {
+        this.player = this.playersByClientId[ clientId ]
       }
+
+      this.addEntity(this.playersByClientId[ clientId ])
     }
   }
 
@@ -52,9 +50,11 @@ export default class Game extends PIXI.Container {
       this.playersByClientId[ clientId ].position.y = newState.players[ clientId ].y
       this.playersByClientId[ clientId ].rotation = newState.players[ clientId ].angle
     }
+    console.log("update state")
   }
 
   addEntity(entity) {
+    console.log("Add entity!")
     this.world.addChild(entity);
     this.entities.push(entity);
   }
@@ -99,7 +99,7 @@ export default class Game extends PIXI.Container {
       key = 1
     }
 
-    if (key) {
+    if (key !== null) {
       console.log('down', name);
       this.network.send([key, 1])
     }
@@ -114,7 +114,7 @@ export default class Game extends PIXI.Container {
       key = 1
     }
 
-    if (key) {
+    if (key !== null) {
       console.log('up', name);
       this.network.send([key, 0])
     }

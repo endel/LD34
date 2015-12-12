@@ -1,6 +1,9 @@
 // var Module = { TOTAL_MEMORY: 256*1024*1024 };
 var Ammo = require('../ammo')
 
+var ammoVec1 = new Ammo.btVector3()
+  , ammoVec2 = new Ammo.btVector3()
+
 class Simulation {
 
   constructor () {
@@ -34,6 +37,16 @@ class Simulation {
     this.dynamicsWorld.addRigidBody(body);
 
     return body
+  }
+
+  remove (body) {
+    this.dynamicsWorld.removeRigidBody(body)
+  }
+
+  applyForce (body, vec1, vec2) {
+    ammoVec1.setValue(vec1.x, vec1.y, 0)
+    ammoVec2.setValue(vec2.x, vec2.y, 0)
+    body.applyForce(ammoVec1, ammoVec2);
   }
 
   simulate (deltaTime) {
