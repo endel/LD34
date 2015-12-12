@@ -44,7 +44,8 @@ class MatchRoom extends Room {
     this.state.players[ client.id ] = {
       x: x,
       y: y,
-      angle: 0
+      angle: 0,
+      name: `Guest ${ this.clients.length }`
     }
 
     this.sendState(client)

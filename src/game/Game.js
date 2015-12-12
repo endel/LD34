@@ -52,10 +52,7 @@ export default class Game extends PIXI.Container {
       return this.playersByClientId[clientId];
     }
 
-    var player = new Player();
-    player.x = data.x;
-    player.y = data.y;
-    player.rotation = data.rotation;
+    var player = new Player(data);
 
     this.addEntity(player);
     this.playersByClientId[ clientId ] = player
