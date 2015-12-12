@@ -29,6 +29,7 @@ function init() {
     keyNameMap[keycode[f]] = f;
   }
 
+  window.addEventListener('touchstart', onTouchStart);
   window.addEventListener('keydown', onKeyDown);
   window.addEventListener('keyup', onKeyUp);
   render(0);
@@ -47,6 +48,16 @@ function onKeyUp(e) {
   var name = keyNameMap[e.which];
   if (name !== undefined) {
     game.keyUp(name);
+  }
+}
+
+function onTouchStart(e) {
+  if (e.touches && e.touches[0]) {
+    if (0.5 < e.touches[0].clientX / window.innerWidth) {
+      game.keyUp("LEFT");
+    } else {
+      game.keyUp("RIGHT");
+    }
   }
 }
 
