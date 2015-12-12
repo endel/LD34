@@ -7,13 +7,13 @@ var tileSize = 32;
 export default class Track extends PIXI.Container {
   constructor(id) {
     super();
+    console.log('new track', id);
     this.base = new PIXI.Container();
     this.addChild(this.base);
     this.setup(data.track[id]);
   }
 
   setup(config) {
-    console.log(config);
     var map = config.map;
     var len = map.length;
     var cols = config.cols;
