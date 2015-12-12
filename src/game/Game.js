@@ -25,6 +25,15 @@ export default class Game extends PIXI.Container {
   }
 
   onSetup (data) {
+    this.track = new Track('long');
+    this.world.addChild(this.track);
+
+    this.dummy = new DummyPlayer();
+    this.addEntity(this.dummy);
+    this.camera.target = this.dummy;
+  }
+
+  onSetup (data) {
     // this.loadMap(data.map)
     if (data.players) {
       for (var clientId in data.players) {
@@ -85,7 +94,7 @@ export default class Game extends PIXI.Container {
 
     // if (this.player && key) {
     //   console.log('down', name);
-    //   this.network.send([key, 0]);
+    //   this.network.send([key, 1]);
     // }
   }
 

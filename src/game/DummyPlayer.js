@@ -1,11 +1,10 @@
-var math = require('../utils/math')
+import Entity from './Entity';
+import * as math from '../tools/math';
 
-class Player {
-
-  constructor (x, y) {
-    this.position = {x: x || 0, y: y || 0}
-    this.rotation = 0;
-    this.velocity = { x:0, y:0 };
+export default class DummyPlayer extends Entity {
+  constructor() {
+    super(0xFFFF00, 32, 40);
+    this.velocity = {x:0, y:0};
     this.acceleration = 0;
     this.torque = 0;
   }
@@ -35,9 +34,6 @@ class Player {
 		this.torque += side*0.03;
 		this.torque = math.clamp(this.torque, -0.12, 0.12);
 		this.acceleration += 1;
-		this.acceleration = math.clamp(this.acceleration, -5, 5);
-    console.log("impulse", side)
+		this.acceleration = math.clamp(this.acceleration, -2, 2);
 	}
 }
-
-module.exports = Player
