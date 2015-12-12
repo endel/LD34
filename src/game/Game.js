@@ -31,7 +31,7 @@ export default class Game extends PIXI.Container {
   setup(map) {
     var len = map.length;
     var cols = Math.sqrt(len);
-    var size = 256;
+    var size = 128;
     for (var i = 0; i < len; i++) {
       var type = map[i];
       var px = Math.floor(i%cols);
@@ -53,5 +53,13 @@ export default class Game extends PIXI.Container {
     while (i--) {
       this.entities[i].update(delta);
     }
+  }
+
+  keyDown(name) {
+    console.log('down', name);
+  }
+
+  keyUp(name) {
+    console.log('up', name);
   }
 }

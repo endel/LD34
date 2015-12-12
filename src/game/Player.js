@@ -6,5 +6,6 @@ export default class Player extends Entity {
   }
 
   update(delta) {
+
   }
 }

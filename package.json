@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "colyseus.js": "^0.1.8",
+    "keycode.js": "0.0.1",
     "pixi.js": "^3.0.8"
   }
 }
