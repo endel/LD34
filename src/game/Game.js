@@ -4,6 +4,7 @@ import Physics from './Physics';
 import Quad from './Quad';
 import Player from './Player';
 import Track from './Track';
+import Camera from './Camera';
 
 export default class Game extends PIXI.Container {
   constructor() {
@@ -12,7 +13,7 @@ export default class Game extends PIXI.Container {
     this.world = new PIXI.Container();
     this.addChild(this.world);
 
-    this.camera = {x:0, y:0, target:null};
+    this.camera = new Camera();
     this.entities = [];
 
     this.network = new Network();
@@ -68,12 +69,7 @@ export default class Game extends PIXI.Container {
   }
 
   update(delta) {
-    // player may not have connected yet
-    if (this.camera.target) {
-      this.camera.x -= (this.camera.x - this.camera.target.position.x)*0.5;
-      this.camera.y -= (this.camera.y - this.camera.target.position.y)*0.5;
-    }
-
+    this.camera.update(delta);
     this.world.position.x = -this.camera.x;
     this.world.position.y = -this.camera.y;
 

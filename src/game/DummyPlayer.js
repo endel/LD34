@@ -34,6 +34,6 @@ export default class DummyPlayer extends Entity {
 		this.torque += side*0.03;
 		this.torque = math.clamp(this.torque, -0.12, 0.12);
 		this.acceleration += 1;
-		this.acceleration = math.clamp(this.acceleration, -2, 2);
+		this.acceleration = math.clamp(this.acceleration, -5, 5);
 	}
 }

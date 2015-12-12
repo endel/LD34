@@ -3,6 +3,7 @@ import Quad from './Quad';
 import * as data from '../data/data';
 
 var tileSize = 32;
+var chunkSize = 9;
 
 export default class Track extends PIXI.Container {
   constructor(id) {
@@ -16,7 +17,7 @@ export default class Track extends PIXI.Container {
     var map = config.map;
     var len = map.length;
     var cols = config.cols;
-    var size = tileSize*cols;
+    var size = tileSize*chunkSize;
     for (var i = 0; i < len; i++) {
       var type = map[i];
       var px = Math.floor(i%cols);
