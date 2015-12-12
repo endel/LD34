@@ -44,7 +44,7 @@ export default class Game extends PIXI.Container {
   addEntity (entity) {
     console.log("Add entity!")
     this.world.addChild(entity);
-    this.entities.push(entity);
+    // this.entities.push(entity);
   }
 
   addNewPlayer (clientId, data) {
@@ -71,10 +71,13 @@ export default class Game extends PIXI.Container {
     this.world.position.x = -this.camera.x;
     this.world.position.y = -this.camera.y;
 
-    var i = this.entities.length;
-    while (i--) {
-      this.entities[i].update(delta);
+    for (var clientId in this.playersByClientId) {
+      this.playersByClientId[ clientId ].update(delta)
     }
+    // var i = this.entities.length;
+    // while (i--) {
+    //   this.entities[i].update(delta);
+    // }
   }
 
   keyDown(name) {
