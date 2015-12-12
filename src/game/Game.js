@@ -21,9 +21,6 @@ export default class Game extends PIXI.Container {
     this.network.on('setup', this.onSetup.bind(this));
     this.network.on('update', this.onUpdateState.bind(this));
     this.network.on('new-player', this.addNewPlayer.bind(this));
-
-    this.track = new Track('long');
-    this.world.addChild(this.track);
   }
 
   onSetup (data) {

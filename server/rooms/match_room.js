@@ -97,9 +97,9 @@ class MatchRoom extends Room {
 
     player.update()
 
-    this.state.players[ clientId ].x = player.position.x
-    this.state.players[ clientId ].y = player.position.y
-    this.state.players[ clientId ].angle = player.rotation
+    this.state.players[ clientId ].targetX = player.position.x
+    this.state.players[ clientId ].targetY = player.position.y
+    this.state.players[ clientId ].targetAngle = player.rotation
   }
 
   dispose () {

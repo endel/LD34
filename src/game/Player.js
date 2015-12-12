@@ -1,8 +1,7 @@
 import Entity from './Entity';
-import lerp from 'lerp'
+import lerp from 'lerp';
 
 export default class Player extends Entity {
-
   constructor(data) {
     super();
 
@@ -22,16 +21,16 @@ export default class Player extends Entity {
     this.playerName.position.x = -this.playerName.width / 2
     this.playerName.position.y = this.height + this.playerName.height + 10
     this.addChild(this.playerName)
-  }
 
-  set x (targetX) { this.targetX = targetX }
-  set y (targetY) { this.targetY = targetY  }
-  set angle (targetAngle) { this.targetAngle = targetAngle }
+    this.targetX = 0;
+    this.targetY = 0;
+    this.targetAngle = 0;
+    this.ease = 0.2;
+  }
 
   update(delta) {
-    this.position.x = lerp(this.position.x, this.targetX, 0.2)
-    this.position.y = lerp(this.position.y, this.targetY, 0.2)
-    this.entity.rotation = lerp(this.entity.rotation, this.targetAngle, 0.2)
+    this.position.x = lerp(this.position.x, this.targetX, this.ease);
+    this.position.y = lerp(this.position.y, this.targetY, this.ease);
+    this.rotation = lerp(this.rotation || 0, this.targetAngle, this.ease);
   }
-
 }
