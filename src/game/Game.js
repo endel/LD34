@@ -16,10 +16,11 @@ export default class Game extends PIXI.Container {
     this.camera = new Camera();
     this.entities = [];
 
-    this.network = new Network();
+    this.playersByClientId = {};
+    this.network = new Network(this.playersByClientId);
     this.network.on('setup', this.onSetup.bind(this));
     this.network.on('update', this.onUpdateState.bind(this));
-    this.playersByClientId = {};
+    this.network.on('new-player', this.addNewPlayer.bind(this));
 
     this.track = new Track('long');
     this.world.addChild(this.track);
@@ -32,34 +33,37 @@ export default class Game extends PIXI.Container {
     // this.loadMap(data.map)
     if (data.players) {
       for (var clientId in data.players) {
-        this.playersByClientId[ clientId ] = new Player();
-        this.playersByClientId[ clientId ].x = data.players[ clientId ].x;
-        this.playersByClientId[ clientId ].y = data.players[ clientId ].y;
-        this.playersByClientId[ clientId ].rotation = data.players[ clientId ].rotation;
-
-        if (clientId === this.network.clientId) {
-          this.player = this.playersByClientId[ clientId ];
-          this.camera.target = this.player;
-        }
-
-        this.addEntity(this.playersByClientId[ clientId ]);
+        this.addNewPlayer(clientId, data.players[ clientId ])
       }
     }
   }
 
   onUpdateState (newState) {
-    for (var clientId in newState.players) {
-      this.playersByClientId[ clientId ].x = newState.players[ clientId ].x;
-      this.playersByClientId[ clientId ].y = newState.players[ clientId ].y;
-      this.playersByClientId[ clientId ].angle = newState.players[ clientId ].rotation;
-    }
-    console.log("update state")
   }
 
-  addEntity(entity) {
+  addEntity (entity) {
     console.log("Add entity!")
     this.world.addChild(entity);
     this.entities.push(entity);
+  }
+
+  addNewPlayer (clientId, data) {
+    if (this.playersByClientId[clientId]) {
+      return this.playersByClientId[clientId];
+    }
+
+    var player = new Player();
+    player.x = data.x;
+    player.y = data.y;
+    player.rotation = data.rotation;
+
+    this.addEntity(player);
+    this.playersByClientId[ clientId ] = player
+
+    if (clientId === this.network.clientId) {
+      this.player = player;
+      this.camera.target = this.player;
+    }
   }
 
   update(delta) {
