@@ -1,3 +1,5 @@
+'use strict';
+
 var math = require('../utils/math')
 
 class Player {

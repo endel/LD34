@@ -49,11 +49,13 @@ export default class Game extends PIXI.Container {
 
   onUpdateState (newState) {
     for (var clientId in newState.players) {
-      this.playersByClientId[ clientId ].x = newState.players[ clientId ].x;
-      this.playersByClientId[ clientId ].y = newState.players[ clientId ].y;
-      this.playersByClientId[ clientId ].angle = newState.players[ clientId ].rotation;
+      var player = this.playersByClientId[ clientId ];
+      var state = newState.players[ clientId ];
+      player.targetX = state.x;
+      player.targetY = state.y;
+      player.targetAngle = state.rotation;
     }
-    console.log("update state")
+    console.log("update state");
   }
 
   addEntity(entity) {
