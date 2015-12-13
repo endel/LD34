@@ -23,6 +23,7 @@ function init() {
   stage.container.addChild(game);
 
   window.game = game
+  window.stage = stage
 
   keyNameMap = [];
   for (var f in keycode) {

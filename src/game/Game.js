@@ -1,10 +1,10 @@
 import PIXI from 'pixi.js';
 import Network from './Network';
-import Physics from './Physics';
 import Quad from './Quad';
 import Player from './Player';
 import Track from './Track';
 import Camera from './Camera';
+import Leaderboard from './Leaderboard';
 
 export default class Game extends PIXI.Container {
 
@@ -16,6 +16,11 @@ export default class Game extends PIXI.Container {
 
     this.camera = new Camera();
     this.entities = [];
+
+    this.leaderboard = new Leaderboard();
+    this.leaderboard.x = 170
+    this.leaderboard.y = -248
+    this.addChild(this.leaderboard)
 
     this.playersByClientId = {};
     this.network = new Network(this.playersByClientId);
