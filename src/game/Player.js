@@ -1,11 +1,14 @@
 import Entity from './Entity';
 import lerp from 'lerp';
+import Boat from '../bitmap/Boat';
+import Hat from '../bitmap/Hat';
+import Paddle from '../bitmap/Paddle';
 
 export default class Player extends Entity {
   constructor(data) {
     super();
 
-    this.entity = new Entity(0xFFFF00, 32, 40)
+    this.entity = new Entity()
     this.addChild(this.entity)
 
     this.position.x = this.targetX = data.targetX
@@ -22,7 +25,37 @@ export default class Player extends Entity {
 
     this.name = data.name || "Guest 1"
 
+    this.createView();
+
     this.ease = 0.2;
+    this.left = 0;
+    this.right = 0;
+  }
+
+  createView() {
+    var container = this.entity;
+    var paddleDistance = 8;
+
+    this.boat = new Boat();
+    container.addChild(this.boat);
+
+    this.char = new PIXI.Container();
+    container.addChild(this.char);
+    this.char.position.y = 4;
+
+    this.paddleLeft = new Paddle();
+    this.char.addChild(this.paddleLeft);
+    this.paddleLeft.position.x = paddleDistance;
+    this.paddleLeftAngle = 0;
+
+    this.paddleRight = new Paddle();
+    this.char.addChild(this.paddleRight);
+    this.paddleRight.scale.x = -1;
+    this.paddleRight.position.x = -paddleDistance;
+    this.paddleRightAngle = 0;
+
+    this.hat = new Hat();
+    this.char.addChild(this.hat);
   }
 
   set name (name) {
@@ -34,5 +67,21 @@ export default class Player extends Entity {
     this.position.x = lerp(this.position.x, this.targetX, this.ease);
     this.position.y = lerp(this.position.y, this.targetY, this.ease);
     this.entity.rotation = lerp(this.entity.rotation || 0, this.targetAngle, this.ease);
+
+    if (this.right) {
+      this.paddleRightAngle = Math.PI*0.25;
+    } else {
+      this.paddleRightAngle = -Math.PI*0.25;
+    }
+
+    if (this.left) {
+      this.paddleLeftAngle = -Math.PI*0.25;
+    } else {
+      this.paddleLeftAngle = Math.PI*0.25;
+    }
+
+    var paddleEase = 0.2;
+    this.paddleRight.rotation -= (this.paddleRight.rotation - this.paddleRightAngle)*paddleEase;
+    this.paddleLeft.rotation -= (this.paddleLeft.rotation - this.paddleLeftAngle)*paddleEase;
   }
 }
