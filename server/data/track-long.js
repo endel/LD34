@@ -1,5 +1,6 @@
 module.exports = {
   cols: 9,
+  tileSize: 32,
   map: [
     0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 1, 1, 1, 1, 3, 1, 0,

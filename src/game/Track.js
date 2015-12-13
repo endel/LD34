@@ -3,7 +3,6 @@ import Quad from './Quad';
 import Water from '../bitmap/Water';
 import Grass from '../bitmap/Grass';
 
-var tileSize = 32;
 var chunkSize = 9;
 
 export default class Track extends PIXI.Container {
