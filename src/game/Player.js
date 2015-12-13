@@ -85,6 +85,11 @@ export default class Player extends Entity {
       this.paddleLeftAngle = Math.PI*0.25;
     }
 
+    if (this.left && this.right) {
+      this.hatPosition.x = 0;
+      this.hatPosition.y = 4;
+    }
+
     var paddleEase = 0.2;
     this.paddleRight.rotation -= (this.paddleRight.rotation - this.paddleRightAngle)*paddleEase;
     this.paddleLeft.rotation -= (this.paddleLeft.rotation - this.paddleLeftAngle)*paddleEase;
