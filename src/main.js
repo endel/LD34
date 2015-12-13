@@ -1,8 +1,8 @@
 import Stage from './tools/Stage';
 import Game from './game/Game';
 import keycode from 'keycode.js';
+import ClockTimer from 'clock-timer.js'
 
-var lastTime;
 var stage;
 var game;
 var keyNameMap;
@@ -11,7 +11,6 @@ init();
 
 function init() {
   'use strict';
-  lastTime = 0;
   stage = new Stage({
     targetWidth: 800,
     targetHeight: 500,
@@ -24,6 +23,7 @@ function init() {
 
   window.game = game
   window.stage = stage
+  window.clock = new ClockTimer()
 
   keyNameMap = [];
   for (var f in keycode) {
@@ -33,6 +33,8 @@ function init() {
   window.addEventListener('touchstart', onTouchStart);
   window.addEventListener('keydown', onKeyDown);
   window.addEventListener('keyup', onKeyUp);
+
+  clock.start()
   render(0);
 }
 
@@ -64,9 +66,8 @@ function onTouchStart(e) {
 
 function render(time) {
   'use strict';
-  var delta = time - lastTime;
-  game.update(delta);
+  clock.tick()
+  game.update(clock.deltaTime);
   stage.render();
-  lastTime = time;
   requestAnimationFrame(render);
 }

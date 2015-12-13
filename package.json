@@ -24,6 +24,7 @@
     "watchify": "^3.4.0"
   },
   "dependencies": {
+    "clock-timer.js": "^1.0.0",
     "colyseus.js": "^0.1.8",
     "keycode.js": "0.0.1",
     "lerp": "^1.0.3",
