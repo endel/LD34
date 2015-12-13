@@ -72,6 +72,7 @@ class MatchRoom extends Room {
     } else if (typeof(key)==="number" && typeof(value)==="number") {
       this.players[ client.id ].left = key
       this.players[ client.id ].right = value
+      console.log("left: ", key, "right: ", value)
 
     }
   }
@@ -101,19 +102,10 @@ class MatchRoom extends Room {
   }
 
   updatePlayer (clientId, player) {
+    if (player.left !== -1) { this.state.players[ clientId ].left = player.left }
+    if (player.right !== -1) { this.state.players[ clientId ].right = player.right }
+
     // only move player when it's game has started
-    if (player.started) {
-      if (player.left === 1) {
-        player.impulse(1)
-        player.left = 0
-      }
-
-      if (player.right === 1) {
-        player.impulse(-1)
-        player.right = 0
-      }
-    }
-
     player.update()
 
     this.state.players[ clientId ].targetX = player.position.x

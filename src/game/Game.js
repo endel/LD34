@@ -38,7 +38,8 @@ export default class Game extends PIXI.Container {
     this.network.on('start', this.onStartGame.bind(this));
     this.network.on('lap', this.onLapCompleted.bind(this));
 
-    this.keys = [0, 0]
+    this.keysDirty = false
+    this.keys = [-1, -1]
   }
 
   onSetup (data) {
@@ -103,11 +104,11 @@ export default class Game extends PIXI.Container {
       this.playersByClientId[ clientId ].update(delta)
     }
 
-    if (this.keys[0] !== 0 || this.keys[1] !== 0) {
+    if (this.keysDirty) {
       this.network.send(this.keys)
-      this.keys[0] = 0
-      this.keys[1] = 0
+      this.keysDirty = false
     }
+
     // var i = this.entities.length;
     // while (i--) {
     //   this.entities[i].update(delta);
@@ -123,9 +124,10 @@ export default class Game extends PIXI.Container {
       key = 1;
     }
 
-    // if (key !== null) {
-    //   this.keys[key] = 0
-    // }
+    if (key !== null && this.keys[key] !== 1) {
+      this.keys[key] = 1
+      this.keysDirty = true
+    }
   }
 
   keyUp(name) {
@@ -138,7 +140,8 @@ export default class Game extends PIXI.Container {
     }
 
     if (key !== null) {
-      this.keys[key] = 1
+      this.keys[key] = 0
+      this.keysDirty = true
     }
   }
 }

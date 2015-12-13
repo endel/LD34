@@ -28,8 +28,8 @@ export default class Player extends Entity {
     this.createView();
 
     this.ease = 0.2;
-    this.left = 0;
-    this.right = 0;
+    this.left = -1;
+    this.right = -1;
   }
 
   createView() {
@@ -68,13 +68,13 @@ export default class Player extends Entity {
     this.position.y = lerp(this.position.y, this.targetY, this.ease);
     this.entity.rotation = lerp(this.entity.rotation || 0, this.targetAngle, this.ease);
 
-    if (this.right) {
+    if (this.left) {
       this.paddleRightAngle = Math.PI*0.25;
     } else {
       this.paddleRightAngle = -Math.PI*0.25;
     }
 
-    if (this.left) {
+    if (this.right) {
       this.paddleLeftAngle = -Math.PI*0.25;
     } else {
       this.paddleLeftAngle = Math.PI*0.25;

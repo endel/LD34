@@ -14,7 +14,27 @@ class Player {
     this.acceleration = 0;
     this.torque = 0;
     this.laps = []
+
+    this._left = -1
+    this._right = -1
   }
+
+  set left (left) {
+    if (left !== this._left && left === 0) {
+      this.impulse(-1)
+    }
+    this._left = left
+  }
+
+  set right (right) {
+    if (right !== this._right && right === 0) {
+      this.impulse(1)
+    }
+    this._right = right
+  }
+
+  get left () { return this._left }
+  get right () { return this._right }
 
   update() {
     this.rotation += this.torque;
