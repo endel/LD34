@@ -15,8 +15,10 @@ export default class NameForm {
   }
 
   setName (name) {
-    this.previousValue = name
-    this.nameEl.value = name
+    if (this.nameEl.value == "") {
+      this.previousValue = name
+      this.nameEl.value = name
+    }
   }
 
   onSubmit (e) {
