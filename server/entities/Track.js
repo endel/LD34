@@ -1,9 +1,9 @@
 var directions = {
   // http://www.mathmistakes.info/facts/TrigFacts/learn/images/ucar.gif
-  top: Math.PI * 2, // = right
-  right: Math.PI / 2, // = top
-  bottom: Math.PI, // = left
-  left: (Math.PI * 3) / 2 // = bottom
+  top: Math.PI * 2,
+  right: Math.PI / 2,
+  bottom: Math.PI,
+  left: (Math.PI * 3) / 2
 }
 
 class Track {
@@ -24,10 +24,11 @@ class Track {
       if (this.chunks[type].indexOf('start') === 0) {
         var direction = this.chunks[type].match(/start:(.*)/)
         this.spawnPosition = {
-          x: px,
-          y: py,
+          x: px * this.tileSize,
+          y: py * this.tileSize,
           rotation: directions[direction[1]]
         }
+        console.log(this.spawnPosition)
 
       }
       // var quad = new Quad(color, size, size, 0, 0);
