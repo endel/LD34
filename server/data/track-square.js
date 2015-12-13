@@ -1,6 +1,6 @@
 module.exports = {
-  id: 'square',
   cols: 5,
+  tileSize: 32,
   map: [
     0, 0, 0, 0, 0,
     0, 1, 1, 1, 0,
@@ -11,7 +11,7 @@ module.exports = {
   chunks: [
     'grass',
     'water',
-    'start:0',
+    'start:left',
     'prizes',
     'woods'
   ]

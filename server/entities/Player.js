@@ -4,12 +4,12 @@ var math = require('../utils/math')
 
 class Player {
 
-  constructor (x, y) {
+  constructor (spawnPosition) {
     // player started running?
     this.started = false
 
-    this.position = {x: x || 0, y: y || 0}
-    this.rotation = 0;
+    this.position = { x: spawnPosition.x, y: spawnPosition.y }
+    this.rotation = spawnPosition.rotation;
     this.velocity = { x:0, y:0 };
     this.acceleration = 0;
     this.torque = 0;
