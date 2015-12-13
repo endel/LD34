@@ -20,9 +20,9 @@ export default class Player extends Entity {
     this.playerName.position.y = this.height + this.playerName.height + 10
     this.addChild(this.playerName)
 
-    this.targetX = 0;
-    this.targetY = 0;
-    this.targetAngle = 0;
+    this.targetX = data.x;
+    this.targetY = data.y;
+    this.targetAngle = data.angle;
     this.name = data.name || "Guest 1"
 
     this.ease = 0.2;
