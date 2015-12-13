@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   id: 'square',
   cols: 5,
   map: [

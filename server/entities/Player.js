@@ -5,6 +5,9 @@ var math = require('../utils/math')
 class Player {
 
   constructor (x, y) {
+    // player started running?
+    this.started = false
+
     this.position = {x: x || 0, y: y || 0}
     this.rotation = 0;
     this.velocity = { x:0, y:0 };

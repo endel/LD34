@@ -4,6 +4,7 @@ var colyseus = require('colyseus')
   , http = require('http')
   , express = require('express')
   , cors = require('cors')
+  , Leaderboard = require('./db/leaderboard')
 
   , tmx = require('tmx-parser')
   , MatchRoom = require('./rooms/match_room')
@@ -13,10 +14,11 @@ var colyseus = require('colyseus')
   , server = http.createServer(app)
   , gameServer = new colyseus.Server({server: server})
 
-// register room for map1
-tmx.parseFile("maps/map1.tmx", function(err, data) {
-  gameServer.register("map1", MatchRoom, { map: data })
-})
+  , tracks = require('./data/tracks')
+
+for (let name in tracks) {
+  gameServer.register(name, MatchRoom, { track: tracks[name] })
+}
 
 if (process.env.ENVIRONMENT !== "production") {
   app.use(cors())
@@ -30,6 +32,14 @@ if (process.env.ENVIRONMENT !== "production") {
   }))
 }
 app.use(express.static( __dirname + '/public' ))
+
+// leaderboard requests
+app.get('leaderboard', function(req, res) {
+  Leaderboard.listByTime(req.query.map, function(err, data) {
+    res.json(data)
+  })
+})
+
 server.listen(port);
 
 console.log(`Listening on http://localhost:${ port }`)
