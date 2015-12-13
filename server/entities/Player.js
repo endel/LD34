@@ -21,14 +21,14 @@ class Player {
 
   set left (left) {
     if (left !== this._left && left === 0) {
-      this.impulse(-1)
+      this.impulse(1)
     }
     this._left = left
   }
 
   set right (right) {
     if (right !== this._right && right === 0) {
-      this.impulse(1)
+      this.impulse(-1)
     }
     this._right = right
   }

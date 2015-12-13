@@ -27,5 +27,7 @@ export default class Water extends PIXI.Sprite {
   constructor() {
     super();
     this.texture = bitmap.getTexture();
+    // var shader = new PIXI.RGBSplitFilter();
+    // this.shader = shader;
   }
 }

@@ -56,6 +56,7 @@ export default class Player extends Entity {
 
     this.hat = new Hat();
     this.char.addChild(this.hat);
+    this.hatPosition = {x:0, y:0};
   }
 
   set name (name) {
@@ -70,12 +71,16 @@ export default class Player extends Entity {
 
     if (this.left) {
       this.paddleRightAngle = Math.PI*0.25;
+      this.hatPosition.x = 4;
+      this.hatPosition.y = 2;
     } else {
       this.paddleRightAngle = -Math.PI*0.25;
     }
 
     if (this.right) {
       this.paddleLeftAngle = -Math.PI*0.25;
+      this.hatPosition.x = -4;
+      this.hatPosition.y = 2;
     } else {
       this.paddleLeftAngle = Math.PI*0.25;
     }
@@ -83,5 +88,11 @@ export default class Player extends Entity {
     var paddleEase = 0.2;
     this.paddleRight.rotation -= (this.paddleRight.rotation - this.paddleRightAngle)*paddleEase;
     this.paddleLeft.rotation -= (this.paddleLeft.rotation - this.paddleLeftAngle)*paddleEase;
+
+    var hatEase = 0.1;
+    this.hat.position.x -= (this.hat.position.x - this.hatPosition.x)*hatEase;
+    this.hat.position.y -= (this.hat.position.y - this.hatPosition.y)*hatEase;
+    this.hatPosition.x *= hatEase;
+    this.hatPosition.y *= hatEase;
   }
 }
