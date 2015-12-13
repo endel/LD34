@@ -15,7 +15,7 @@ module.exports = {
   chunks: [
     'grass',
     'water',
-    'start:top',
+    'start:right',
     'prizes',
     'woods'
   ]

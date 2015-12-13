@@ -5,7 +5,7 @@ export default class Quad extends PIXI.Graphics {
     super();
     if (color !== undefined && color !== null) {
       this.beginFill(color);
-      this.drawRect(-width*ax, -height*ay, width, height);
+      this.drawRect(0, 0, width, height);
       this.endFill();
     }
   }
