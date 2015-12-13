@@ -28,8 +28,8 @@ export default class Player extends Entity {
     this.createView();
 
     this.ease = 0.2;
-    this.left = -1;
-    this.right = -1;
+    this.left = 0;
+    this.right = 0;
   }
 
   createView() {

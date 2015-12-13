@@ -15,8 +15,8 @@ class Player {
     this.torque = 0;
     this.laps = []
 
-    this._left = -1
-    this._right = -1
+    this._left = 0
+    this._right = 0
   }
 
   set left (left) {
