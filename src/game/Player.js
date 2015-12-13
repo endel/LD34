@@ -3,6 +3,7 @@ import lerp from 'lerp';
 import Boat from '../bitmap/Boat';
 import Hat from '../bitmap/Hat';
 import Paddle from '../bitmap/Paddle';
+import WaterTrail from '../bitmap/WaterTrail';
 
 export default class Player extends Entity {
   constructor(data) {
@@ -59,6 +60,16 @@ export default class Player extends Entity {
     this.hatPosition = {x:0, y:0};
   }
 
+  createParticles() {
+    this.trail = new Container();
+    container.addChild(this.trail);
+    var i = 20;
+    while (i--) {
+      var wt = new WaterTrail();
+      this.trail.addChild(wt);
+    }
+  }
+
   set name (name) {
     this.playerName.text = name
     this.playerName.position.x = -this.playerName.width / 2
@@ -94,5 +105,11 @@ export default class Player extends Entity {
     this.hat.position.y -= (this.hat.position.y - this.hatPosition.y)*hatEase;
     this.hatPosition.x *= hatEase;
     this.hatPosition.y *= hatEase;
+
+    this.updateTrail();
+  }
+
+  updateTrail() {
+
   }
 }
