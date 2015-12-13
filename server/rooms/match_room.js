@@ -72,7 +72,6 @@ class MatchRoom extends Room {
     } else if (typeof(key)==="number" && typeof(value)==="number") {
       this.players[ client.id ].left = key
       this.players[ client.id ].right = value
-      console.log("left: ", key, "right: ", value)
 
     }
   }
