@@ -53,6 +53,9 @@ class Track {
 
     // prevent from colliding with grass
     if (nextTile === 0) {
+      player.accelerationX /= 1.3
+      player.accelerationY /= 1.3
+
       if (nextTileX !== currentTileX) {
         player.accelerationX = 0
 

@@ -82,7 +82,7 @@ export default class Player extends Entity {
 
     if (this.left) {
       this.paddleRightAngle = Math.PI*0.25;
-      this.hatPosition.x = 4;
+      this.hatPosition.x = 2;
       this.hatPosition.y = 2;
     } else {
       this.paddleRightAngle = -Math.PI*0.25;
@@ -90,10 +90,15 @@ export default class Player extends Entity {
 
     if (this.right) {
       this.paddleLeftAngle = -Math.PI*0.25;
-      this.hatPosition.x = -4;
+      this.hatPosition.x = -2;
       this.hatPosition.y = 2;
     } else {
       this.paddleLeftAngle = Math.PI*0.25;
+    }
+
+    if (this.left && this.right) {
+      this.hatPosition.x = 0;
+      this.hatPosition.y = 3;
     }
 
     var paddleEase = 0.2;
