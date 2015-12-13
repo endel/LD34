@@ -5,6 +5,7 @@ var Room = require('colyseus').Room
 
   // , Leaderboard = require('../db/leaderboard')
   , Player = require('../entities/Player')
+  , Track = require('../entities/Track')
   , chunks = require('../data/chunks')
 
 const TICK_RATE = 30
@@ -17,16 +18,15 @@ class MatchRoom extends Room {
 
     // Send cols as first element in MAP array
     var map = options.track.map.slice(0) // clone array
+    map.unshift(options.track.tileSize)
     map.unshift(options.track.cols)
 
     super(options, {
       map: map,
-      players: {},
-      leaderboard: [],
-      items: []
+      players: {}
     })
 
-    this.track = options.track
+    this.track = new Track(options.track)
     this.players = {}
 
     this.clock = new ClockTimer()
@@ -40,20 +40,14 @@ class MatchRoom extends Room {
   onJoin (client, options) {
     console.log(client.id, 'joined')
 
-
-    var x = 10, y = 10
-
-    this.players[ client.id ] = new Player(x, y)
+    this.players[ client.id ] = new Player(this.track.spawnPosition)
+    this.state.players[ client.id ] = {
+      name: `Guest ${ this.clients.length }`
+    }
+    this.updatePlayer(client.id, this.players[ client.id ])
 
     // TODO: remove me
     this.players[ client.id ].lapInterval = this.clock.setInterval(this.logUserLap.bind(this, client), 10000)
-
-    this.state.players[ client.id ] = {
-      x: x,
-      y: y,
-      angle: 0,
-      name: `Guest ${ this.clients.length }`
-    }
 
     this.sendState(client)
   }

@@ -36,6 +36,7 @@ export default class Game extends PIXI.Container {
     this.network.on('update', this.onUpdateState.bind(this));
     this.network.on('new-player', this.addNewPlayer.bind(this));
     this.network.on('start', this.onStartGame.bind(this));
+    this.network.on('lap', this.onLapCompleted.bind(this));
 
     this.keys = [0, 0]
   }
@@ -61,6 +62,11 @@ export default class Game extends PIXI.Container {
         , seconds = '0' + (elapsedSeconds - (minutes * 60))
       this.lapTime.text = `${ minutes }:${ seconds.substr(seconds.length - 2) }`
     }, 1000)
+  }
+
+  onLapCompleted () {
+    console.log("Lap completed!")
+    clock.start()
   }
 
   onUpdateState (newState) {

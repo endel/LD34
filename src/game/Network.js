@@ -35,6 +35,8 @@ export default class Network extends EventEmitter {
   onData (data) {
     if (data === "start") {
       this.emit('start')
+    } else if (data === "lap") {
+      this.emit('lap')
     }
   }
 
