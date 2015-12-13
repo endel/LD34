@@ -41,6 +41,27 @@ class Track {
     }
   }
 
+  collide(player) {
+    var currentTileX = Math.floor(player.position.x / this.size)
+      , currentTileY = Math.floor(player.position.y / this.size)
+      , currentTile = this.map[ (this.cols * currentTileY) + currentTileX ]
+
+      , nextPlayerPosition = player.getNextPosition()
+      , nextTileX = Math.floor(nextPlayerPosition.x / this.size)
+      , nextTileY = Math.floor(nextPlayerPosition.y / this.size)
+      , nextTile = this.map[ (this.cols * nextTileY) + nextTileX ]
+
+    // prevent from colliding with grass
+    if (nextTile === 0) {
+      if (nextTileX !== currentTileX) {
+        player.accelerationX = 0
+
+      } else if (nextTileY !== currentTileY) {
+        player.accelerationY = 0
+      }
+    }
+  }
+
 }
 
 module.exports = Track

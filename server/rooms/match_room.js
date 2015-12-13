@@ -105,6 +105,9 @@ class MatchRoom extends Room {
     if (player.left !== -1) { this.state.players[ clientId ].left = player.left }
     if (player.right !== -1) { this.state.players[ clientId ].right = player.right }
 
+    // check collision with grass
+    this.track.collide(player)
+
     // only move player when it's game has started
     player.update()
 
