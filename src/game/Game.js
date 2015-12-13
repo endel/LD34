@@ -18,8 +18,8 @@ export default class Game extends PIXI.Container {
     this.entities = [];
 
     this.leaderboard = new Leaderboard();
-    this.leaderboard.x = 170
-    this.leaderboard.y = -248
+    this.leaderboard.x = stage.width/2 - this.leaderboard.width;
+    this.leaderboard.y = -stage.height/2;
     this.addChild(this.leaderboard)
 
     this.lapTime = new PIXI.Text("0:00", {
@@ -27,7 +27,7 @@ export default class Game extends PIXI.Container {
       fill : 0xffffff,
       align : 'center'
     })
-    this.lapTime.y = -220
+    this.lapTime.y = -stage.height/2 + 20;
     this.addChild(this.lapTime)
 
     this.playersByClientId = {};
