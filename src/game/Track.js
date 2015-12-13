@@ -1,6 +1,5 @@
 import PIXI from 'pixi.js';
 import Quad from './Quad';
-import * as data from '../data/data';
 
 var tileSize = 32;
 
@@ -10,15 +9,13 @@ export default class Track extends PIXI.Container {
     console.log('new track', id);
     this.base = new PIXI.Container();
     this.addChild(this.base);
-    this.setup(data.track[id]);
   }
 
-  setup(config) {
-    var map = config.map;
-    var len = map.length;
-    var cols = config.cols;
+  setup(data) {
+    var cols = data.shift();
+    var map = data;
     var size = tileSize*cols;
-    for (var i = 0; i < len; i++) {
+    for (var i = 0, len = data.length; i < len; i++) {
       var type = map[i];
       var px = Math.floor(i%cols);
       var py = Math.floor(i/cols);

@@ -41,7 +41,8 @@ export default class Game extends PIXI.Container {
   }
 
   onSetup (data) {
-    this.track = new Track('long');
+    this.track = new Track();
+    this.track.setup(data.map)
     this.world.addChild(this.track);
 
     // this.loadMap(data.map)

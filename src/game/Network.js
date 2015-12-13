@@ -11,7 +11,13 @@ export default class Network extends EventEmitter {
     this.colyseus = new Colyseus(`ws://${ location.hostname }:3553`)
     this.players = players
 
-    this.room = this.colyseus.join('map1')
+    // Read room name from query string
+    // - ?room=long
+    // - ?room=square
+    var roomName = location.href.match(/room=([^&|$]+)/)
+    roomName = (!roomName || !roomName[1]) ? 'long' : roomName[1]
+
+    this.room = this.colyseus.join(roomName)
 
     // this.onSetupRoom.bind(this)
     this.room.on('setup', this.onSetup.bind(this))

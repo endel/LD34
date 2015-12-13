@@ -14,10 +14,11 @@ var colyseus = require('colyseus')
   , server = http.createServer(app)
   , gameServer = new colyseus.Server({server: server})
 
-// register room for map1
-tmx.parseFile("maps/map1.tmx", function(err, data) {
-  gameServer.register("map1", MatchRoom, { map: data })
-})
+  , tracks = require('./data/tracks')
+
+for (let name in tracks) {
+  gameServer.register(name, MatchRoom, { track: tracks[name] })
+}
 
 if (process.env.ENVIRONMENT !== "production") {
   app.use(cors())

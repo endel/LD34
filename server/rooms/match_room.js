@@ -5,6 +5,7 @@ var Room = require('colyseus').Room
 
   // , Leaderboard = require('../db/leaderboard')
   , Player = require('../entities/Player')
+  , chunks = require('../data/chunks')
 
 const TICK_RATE = 30
     , PATCH_RATE = 20
@@ -14,19 +15,18 @@ class MatchRoom extends Room {
   constructor (options) {
     options.updateInterval = 1000 / PATCH_RATE
 
+    // Send cols as first element in MAP array
+    var map = options.track.map.slice(0) // clone array
+    map.unshift(options.track.cols)
+
     super(options, {
-      map: [
-        0, 0, 0, 0, 0,
-        0, 1, 1, 1, 0,
-        0, 1, 0, 1, 0,
-        0, 1, 1, 1, 0,
-        0, 0, 0, 0, 0
-      ],
+      map: map,
       players: {},
       leaderboard: [],
       items: []
     })
 
+    this.track = options.track
     this.players = {}
 
     this.clock = new ClockTimer()

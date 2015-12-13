@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   cols: 9,
   map: [
     0, 0, 0, 0, 0, 0, 0, 2, 0,
