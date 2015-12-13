@@ -10,6 +10,7 @@ class Player {
     this.velocity = { x:0, y:0 };
     this.acceleration = 0;
     this.torque = 0;
+    this.laps = []
   }
 
   update() {

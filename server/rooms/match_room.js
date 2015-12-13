@@ -3,6 +3,7 @@
 var Room = require('colyseus').Room
   , ClockTimer = require('clock-timer.js')
 
+  , Leaderboard = require('../db/leaderboard')
   , Player = require('../entities/Player')
 
 const TICK_RATE = 30
@@ -39,9 +40,14 @@ class MatchRoom extends Room {
   onJoin (client, options) {
     console.log(client.id, 'joined')
 
+
     var x = 10, y = 10
 
     this.players[ client.id ] = new Player(x, y)
+
+    // TODO: remove me
+    this.players[ client.id ].lapInterval = this.clock.setInterval(this.logUserLap.bind(this, client), 10000)
+
     this.state.players[ client.id ] = {
       x: x,
       y: y,
@@ -50,6 +56,10 @@ class MatchRoom extends Room {
     }
 
     this.sendState(client)
+  }
+
+  logUserLap (client) {
+    Leaderboard.insert(client.id, this.roomName, this.state.players[ client.id ].name, 10000)
   }
 
   onMessage (client, data) {
@@ -69,6 +79,9 @@ class MatchRoom extends Room {
 
   onLeave (client) {
     console.log(client.id, "leaved")
+
+    // TODO: remove me
+    this.players[ client.id ].lapInterval.clear()
 
     // remove player references
     delete this.state.players[ client.id ]
