@@ -17,12 +17,12 @@ function init() {
     width: 800,
     height: 500
   });
+  window.stage = stage
 
   game = new Game();
   stage.container.addChild(game);
 
   window.game = game
-  window.stage = stage
   window.clock = new ClockTimer()
 
   keyNameMap = [];
