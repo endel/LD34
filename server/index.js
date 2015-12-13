@@ -4,6 +4,7 @@ var colyseus = require('colyseus')
   , http = require('http')
   , express = require('express')
   , cors = require('cors')
+  , Leaderboard = require('./db/leaderboard')
 
   , tmx = require('tmx-parser')
   , MatchRoom = require('./rooms/match_room')
@@ -30,6 +31,14 @@ if (process.env.ENVIRONMENT !== "production") {
   }))
 }
 app.use(express.static( __dirname + '/public' ))
+
+// leaderboard requests
+app.get('leaderboard', function(req, res) {
+  Leaderboard.listByTime(req.query.map, function(err, data) {
+    res.json(data)
+  })
+})
+
 server.listen(port);
 
 console.log(`Listening on http://localhost:${ port }`)

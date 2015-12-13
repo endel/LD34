@@ -29,11 +29,14 @@ export default class NameForm {
 
     // didn't wanted to change, just close
     if (this.nameEl.value === this.previousValue) {
+      this.network.send(['start'])
       return this.close();
+    } else {
+      this.network.send(['name', this.nameEl.value])
+      this.network.send(['start'])
+      this.loading = true
     }
 
-    this.network.send(['name', this.nameEl.value])
-    this.loading = true
   }
 
   close () {

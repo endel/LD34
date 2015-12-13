@@ -69,6 +69,12 @@ class MatchRoom extends Room {
     if (key == 'name') {
       this.state.players[ client.id ].name = value
 
+    } else if (key == 'start') {
+      // set player start time
+      this.players[ client.id ].started = true
+      this.players[ client.id ].startTime = this.clock.currentTime
+      this.send(client, 'start')
+
     } else if (typeof(key)==="number" && typeof(value)==="number") {
       this.players[ client.id ].left = key
       this.players[ client.id ].right = value
@@ -101,14 +107,17 @@ class MatchRoom extends Room {
   }
 
   updatePlayer (clientId, player) {
-    if (player.left === 1) {
-      player.impulse(1)
-      player.left = 0
-    }
+    // only move player when it's game has started
+    if (player.started) {
+      if (player.left === 1) {
+        player.impulse(1)
+        player.left = 0
+      }
 
-    if (player.right === 1) {
-      player.impulse(-1)
-      player.right = 0
+      if (player.right === 1) {
+        player.impulse(-1)
+        player.right = 0
+      }
     }
 
     player.update()

@@ -12,7 +12,7 @@
   "dependencies": {
     "clamp": "^1.0.1",
     "clock-timer.js": "^1.0.0",
-    "colyseus": "^0.1.8",
+    "colyseus": "^0.1.9",
     "cors": "^2.7.1",
     "express": "^4.13.3",
     "mongodb": "^2.1.0",

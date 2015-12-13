@@ -22,11 +22,20 @@ export default class Game extends PIXI.Container {
     this.leaderboard.y = -248
     this.addChild(this.leaderboard)
 
+    this.lapTime = new PIXI.Text("0:00", {
+      font : '14px Arial',
+      fill : 0xffffff,
+      align : 'center'
+    })
+    this.lapTime.y = -220
+    this.addChild(this.lapTime)
+
     this.playersByClientId = {};
     this.network = new Network(this.playersByClientId);
     this.network.on('setup', this.onSetup.bind(this));
     this.network.on('update', this.onUpdateState.bind(this));
     this.network.on('new-player', this.addNewPlayer.bind(this));
+    this.network.on('start', this.onStartGame.bind(this));
 
     this.keys = [0, 0]
   }
@@ -41,6 +50,16 @@ export default class Game extends PIXI.Container {
         this.addNewPlayer(clientId, data.players[ clientId ])
       }
     }
+  }
+
+  onStartGame () {
+    clock.start()
+    clock.setInterval(() => {
+      var elapsedSeconds = Math.floor(clock.elapsedTime / 1000)
+        , minutes = Math.floor(elapsedSeconds / 60)
+        , seconds = '0' + (elapsedSeconds - (minutes * 60))
+      this.lapTime.text = `${ minutes }:${ seconds.substr(seconds.length - 2) }`
+    }, 1000)
   }
 
   onUpdateState (newState) {

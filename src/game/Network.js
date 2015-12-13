@@ -15,6 +15,7 @@ export default class Network extends EventEmitter {
 
     // this.onSetupRoom.bind(this)
     this.room.on('setup', this.onSetup.bind(this))
+    this.room.on('data', this.onData.bind(this))
     this.room.on('patch', this.onPatchState.bind(this))
 
     // this.onUpdateRoom.bind(this)
@@ -23,6 +24,12 @@ export default class Network extends EventEmitter {
 
   get clientId () {
     return this.colyseus.id
+  }
+
+  onData (data) {
+    if (data === "start") {
+      this.emit('start')
+    }
   }
 
   onSetup (initialState) {
@@ -43,8 +50,6 @@ export default class Network extends EventEmitter {
       } else if (patch.op==='replace' && patch.path.indexOf("/players/") === 0) {
         let [_, clientId, property] = patch.path.match(/\/players\/(.*)\/(.*)/)
         this.players[ clientId ][ property ] = patch.value
-
-        console.log(property, patch.value)
 
         // close name change modal
         if (clientId === this.clientId && property === 'name') {
