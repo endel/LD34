@@ -4,8 +4,8 @@ export default class Bitmap {
   constructor() {
     this.canvas = document.createElement('canvas');
     this.ctx = this.canvas.getContext('2d');
-    this.tileSize = 8;
-    this.cols = 16;
+    this.tileSize = 4;
+    this.cols = 8;
     this.map = [];
     this.colors = [];
     this._texture = null;
@@ -37,7 +37,7 @@ export default class Bitmap {
 
   getTexture() {
     if (!this._texture) {
-      this._texture = PIXI.Texture.fromCanvas(this.canvas);
+      this._texture = PIXI.Texture.fromCanvas(this.canvas, PIXI.SCALE_MODES.NEAREST);
     }
     return this._texture;
   }

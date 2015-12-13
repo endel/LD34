@@ -1,3 +1,5 @@
+'use strict';
+
 var directions = {
   // http://www.mathmistakes.info/facts/TrigFacts/learn/images/ucar.gif
   top: Math.PI * 2,
