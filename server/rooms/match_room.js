@@ -3,7 +3,7 @@
 var Room = require('colyseus').Room
   , ClockTimer = require('clock-timer.js')
 
-  , Leaderboard = require('../db/leaderboard')
+  // , Leaderboard = require('../db/leaderboard')
   , Player = require('../entities/Player')
 
 const TICK_RATE = 30
@@ -59,7 +59,7 @@ class MatchRoom extends Room {
   }
 
   logUserLap (client) {
-    Leaderboard.insert(client.id, this.roomName, this.state.players[ client.id ].name, 10000)
+    // Leaderboard.insert(client.id, this.roomName, this.state.players[ client.id ].name, 10000)
   }
 
   onMessage (client, data) {
