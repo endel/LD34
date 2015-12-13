@@ -24,13 +24,12 @@ class Track {
       if (this.chunks[type].indexOf('start') === 0) {
         var direction = this.chunks[type].match(/start:(.*)/)
         this.spawnPosition = {
-          x: px * this.tileSize,
-          y: py * this.tileSize,
+          x: px * this.size + (this.size / 2),
+          y: py * this.size + (this.size / 2),
           rotation: directions[direction[1]]
         }
-        console.log(this.spawnPosition)
-
       }
+
       // var quad = new Quad(color, size, size, 0, 0);
       // this.base.addChild(quad);
       // quad.position.x = px*size;
