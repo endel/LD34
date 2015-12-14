@@ -59,8 +59,18 @@ export default class Network extends EventEmitter {
         let [_, clientId, property] = patch.path.match(/\/players\/(.*)\/(.*)/)
         this.players[ clientId ][ property ] = patch.value
 
+        // TODO: refactor me
+        if (property === "lapCount" || property === "bestLap") {
+          console.log(property, this.players[ clientId ][ property ])
+          this.players[ clientId ].emit('lap-update')
+          this.emit('update-leaderboard')
+        }
+
         // close name change modal
         if (clientId === this.clientId && property === 'name') {
+          // TODO: refactor me
+          this.players[ clientId ].emit('lap-update')
+          this.emit('update-leaderboard')
           this.nameForm.close()
         }
 

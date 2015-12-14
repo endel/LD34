@@ -17,7 +17,15 @@ export default class Game extends PIXI.Container {
     this.camera = new Camera();
     this.entities = [];
 
-    this.leaderboard = new Leaderboard();
+    this.playersByClientId = {};
+    this.network = new Network(this.playersByClientId);
+    this.network.on('setup', this.onSetup.bind(this));
+    this.network.on('update', this.onUpdateState.bind(this));
+    this.network.on('new-player', this.addNewPlayer.bind(this));
+    this.network.on('start', this.onStartGame.bind(this));
+    this.network.on('update-leaderboard', this.onUpdateLeaderboard.bind(this));
+
+    this.leaderboard = new Leaderboard(this.playersByClientId);
     this.leaderboard.x = stage.width/2 - this.leaderboard.width;
     this.leaderboard.y = -stage.height/2;
     this.addChild(this.leaderboard)
@@ -29,14 +37,6 @@ export default class Game extends PIXI.Container {
     })
     this.lapTime.y = -stage.height/2 + 20;
     this.addChild(this.lapTime)
-
-    this.playersByClientId = {};
-    this.network = new Network(this.playersByClientId);
-    this.network.on('setup', this.onSetup.bind(this));
-    this.network.on('update', this.onUpdateState.bind(this));
-    this.network.on('new-player', this.addNewPlayer.bind(this));
-    this.network.on('start', this.onStartGame.bind(this));
-    this.network.on('lap', this.onLapCompleted.bind(this));
 
     this.keysDirty = false
     this.keys = [-1, -1]
@@ -70,6 +70,10 @@ export default class Game extends PIXI.Container {
     clock.start()
   }
 
+  onUpdateLeaderboard () {
+    this.leaderboard.update()
+  }
+
   onUpdateState (newState) {
   }
 
@@ -91,9 +95,11 @@ export default class Game extends PIXI.Container {
 
     this.addEntity(player);
     this.playersByClientId[ clientId ] = player
+    this.onUpdateLeaderboard()
 
     if (clientId === this.network.clientId) {
       this.player = player;
+      this.player.on('lap-update', () => clock.start())
       this.camera.target = this.player;
     }
   }
