@@ -3,18 +3,21 @@ import Network from './Network';
 import Quad from './Quad';
 import Player from './Player';
 import Track from './Track';
-import Camera from './Camera';
 import Leaderboard from './Leaderboard';
+import World from './World';
 
 export default class Game extends PIXI.Container {
 
   constructor() {
     super();
 
-    this.world = new PIXI.Container();
-    this.addChild(this.world);
+    this.container = new PIXI.Container();
+    this.addChild(this.container);
+    this.container.rotation = -Math.PI/4;
 
-    this.camera = new Camera();
+    this.world = new World();
+    this.container.addChild(this.world);
+
     this.entities = [];
 
     this.playersByClientId = {};
@@ -45,7 +48,8 @@ export default class Game extends PIXI.Container {
   onSetup (data) {
     this.track = new Track();
     this.track.setup(data.map)
-    this.world.addChild(this.track);
+    this.world.add(this.track.water, 0);
+    this.world.add(this.track.grass, 2);
 
     // this.loadMap(data.map)
     if (data.players) {
@@ -80,10 +84,12 @@ export default class Game extends PIXI.Container {
   addEntity (entity) {
     console.log("Add entity!")
     if (entity.particles) {
-      this.world.addChild(entity.particles);
+      this.world.add(entity.particles, 1);
     }
-    this.world.addChild(entity);
-    // this.entities.push(entity);
+    if (entity.playerName) {
+      this.world.add(entity.playerName, 4);
+    }
+    this.world.add(entity, 3);
   }
 
   addNewPlayer (clientId, data) {
@@ -100,14 +106,12 @@ export default class Game extends PIXI.Container {
     if (clientId === this.network.clientId) {
       this.player = player;
       this.player.on('lap-update', () => clock.start())
-      this.camera.target = this.player;
+      this.world.camera.target = this.player;
     }
   }
 
   update(delta) {
-    this.camera.update(delta);
-    this.world.position.x = -this.camera.x;
-    this.world.position.y = -this.camera.y;
+    this.world.update(delta);
 
     for (var clientId in this.playersByClientId) {
       this.playersByClientId[ clientId ].update(delta)

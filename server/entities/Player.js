@@ -16,6 +16,7 @@ class Player extends EventEmitter {
     this.position = { x: spawnPosition.x, y: spawnPosition.y }
     this.rotation = spawnPosition.rotation;
     this.velocity = { x:0, y:0 };
+    this.force = { x:0, y:0 };
     this.acceleration = 0;
     this.accelerationX = 0;
     this.accelerationY = 0;
@@ -61,8 +62,11 @@ class Player extends EventEmitter {
 
   update() {
     this.rotation += this.torque;
-		this.velocity.x = Math.sin(this.rotation)*this.accelerationX;
-		this.velocity.y = -Math.cos(this.rotation)*this.accelerationY;
+		this.velocity.x = Math.sin(this.rotation)*this.accelerationX + this.force.x;
+		this.velocity.y = -Math.cos(this.rotation)*this.accelerationY + this.force.y;
+
+    this.force.x *= 0.9;
+    this.force.y *= 0.9;
 
     if (this.torque < -0.001 || this.torque > 0.001) {
 			this.torque *= 0.95;

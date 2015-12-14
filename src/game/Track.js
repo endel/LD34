@@ -5,12 +5,11 @@ import Grass from '../bitmap/Grass';
 
 var chunkSize = 9;
 
-export default class Track extends PIXI.Container {
+export default class Track {
 
   constructor() {
-    super();
-    this.base = new PIXI.Container();
-    this.addChild(this.base);
+    this.water = new PIXI.Container();
+    this.grass = new PIXI.Container();
   }
 
   setup(data) {
@@ -30,13 +29,14 @@ export default class Track extends PIXI.Container {
         quad = new Water();
         quad.width = size;
         quad.height = size;
+        this.water.addChild(quad);
       } else {
         quad = new Grass();
         quad.width = size;
         quad.height = size;
+        this.grass.addChild(quad);
       }
 
-      this.base.addChild(quad);
       quad.position.x = px*size;
       quad.position.y = py*size;
     }
