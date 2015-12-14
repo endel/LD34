@@ -106,10 +106,10 @@ class Params {
     this.x = 0;
     this.y = 0;
     this.angle = 0;
-    this.scaleX = 0.2;
-    this.scaleY = 0.5;
-    this.growthX = 0.01;
-    this.growthY = 0.02;
+    this.scaleX = 1;
+    this.scaleY = 1;
+    this.growthX = 0;
+    this.growthY = 0;
   }
 
   copy(params) {

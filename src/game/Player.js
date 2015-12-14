@@ -4,6 +4,7 @@ import Boat from '../bitmap/Boat';
 import Hat from '../bitmap/Hat';
 import Paddle from '../bitmap/Paddle';
 import WaterTrail from '../bitmap/WaterTrail';
+import WaterCircle from '../bitmap/WaterCircle';
 import ParticleSystem from './ParticleSystem';
 import * as math from '../tools/math';
 
@@ -37,6 +38,8 @@ export default class Player extends Entity {
     this.ease = 0.2;
     this.left = 0;
     this.right = 0;
+    this.leftAct = false;
+    this.rightAct = false;
   }
 
   createView() {
@@ -67,11 +70,26 @@ export default class Player extends Entity {
 
     this.particles = new PIXI.Container();
 
+    var wc = new WaterCircle();
+    this.circles = new ParticleSystem(50, wc.texture);
+    this.circles.rate = 0;
+    this.particles.addChild(this.circles);
+    this.circles.alpha = 0.02;
+    this.circles.params.life = 100;
+    this.circles.params.scaleX = 0.1;
+    this.circles.params.scaleY = 0.1;
+    this.circles.params.growthX = 0.02;
+    this.circles.params.growthY = 0.02;
+
     var wt = new WaterTrail();
     this.trail = new ParticleSystem(200, wt.texture);
-    this.trail.params.life = 60;
-    this.trail.alpha = 0.05;
     this.particles.addChild(this.trail);
+    this.trail.alpha = 0.03;
+    this.trail.params.life = 60;
+    this.trail.params.scaleX = 0.25;
+    this.trail.params.scaleY = 0.5;
+    this.trail.params.growthX = 0.005;
+    this.trail.params.growthY = 0.02;
   }
 
   set name (name) {
@@ -80,6 +98,9 @@ export default class Player extends Entity {
   }
 
   update(delta) {
+    var leftActDetected = false;
+    var rightActDetected = false;
+
     this.position.x = lerp(this.position.x, this.targetX, this.ease);
     this.position.y = lerp(this.position.y, this.targetY, this.ease);
     this.entity.rotation = lerp(this.entity.rotation || 0, this.targetAngle, this.ease);
@@ -89,16 +110,26 @@ export default class Player extends Entity {
       this.paddleRightAngle = Math.PI*0.25;
       this.hatPosition.x = 2;
       this.hatPosition.y = 2;
+      this.leftAct = true;
     } else {
       this.paddleRightAngle = -Math.PI*0.25;
+      if (this.leftAct) {
+        this.leftAct = false;
+        leftActDetected = true;
+      }
     }
 
     if (this.right) {
       this.paddleLeftAngle = -Math.PI*0.25;
       this.hatPosition.x = -2;
       this.hatPosition.y = 2;
+      this.rightAct = true;
     } else {
       this.paddleLeftAngle = Math.PI*0.25;
+      if (this.rightAct) {
+        this.rightAct = false;
+        rightActDetected = true;
+      }
     }
 
     if (this.left && this.right) {
@@ -122,13 +153,46 @@ export default class Player extends Entity {
       this.trail.rate = 0;
     }
 
-    this.trail.params.life = 40*this.movementRange;
+    var range = 30;
+    var ox = 0;
+    var oy = 0;
+
+    if (leftActDetected || rightActDetected) {
+      ox = Math.cos(this.entity.rotation)*range;
+      oy = Math.sin(this.entity.rotation)*range;
+    }
+
+    if (leftActDetected) {
+      this.emitCircles(-ox, -oy);
+    }
+
+    if (rightActDetected) {
+      this.emitCircles(ox, oy);
+    }
+
+    this.trail.params.life = 5 + 60*this.movementRange;
     this.trail.params.angle = this.entity.rotation;
     this.trail.params.x = this.position.x;
     this.trail.params.y = this.position.y;
     this.trail.update(1);
 
+    this.circles.update(1);
+
     this.lastPosition.x = this.position.x;
     this.lastPosition.y = this.position.y;
+  }
+
+  emitCircles(ox, oy) {
+    var r = 10;
+    var i = 8;
+    while (i--) {
+      var sc = 0.05 + Math.random()*0.2;
+      this.circles.params.scaleX = sc;
+      this.circles.params.scaleY = sc;
+      this.circles.params.life = 30 + Math.random()*100;
+      this.circles.params.x = this.position.x + ox + (Math.random()*r - r/2);
+      this.circles.params.y = this.position.y + oy + (Math.random()*r - r/2);
+      this.circles.emit();
+    }
   }
 }
