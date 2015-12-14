@@ -3,6 +3,8 @@ import fs from 'fs-extra';
 import shell from 'shelljs';
 import chokidar from 'chokidar';
 import spritesheet from 'spritesheet-js';
+import audiosprite from 'audiosprite'
+
 
 var taskname = process.argv[2] || 'release';
 var taskmap = {
@@ -35,6 +37,16 @@ async function copy() {
   fs.copySync('res/images', 'release/images');
 }
 
+async function audio () {
+  fs.emptyDirSync('release/audio');
+  audiosprite(['res/audio/music.mp3'], {
+    output: 'release/audio/music',
+  }, function(err, obj) {
+    if (err) return console.error(err)
+    // console.log(JSON.stringify(obj, null, 2))
+  })
+}
+
 async function css() {
   fs.emptyDirSync('release/css');
   var cmd = 'stylus res/styles/main.styl --out release/css/main.css --compress';
@@ -61,6 +73,7 @@ async function js() {
 async function watch() {
   run(atlas);
   run(copy);
+  run(audio);
   fs.emptyDirSync('release/js');
   fs.emptyDirSync('release/css');
   var cmdJs = 'watchify src/main.js -t [babelify --stage 0] -o release/js/main.js -d -v';

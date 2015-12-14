@@ -91,6 +91,7 @@ class MatchRoom extends Room {
 
     for (var clientId in this.players) {
       var player = this.players[clientId];
+      this.track.collide(player) // check collision with track
       this.updatePlayer(clientId, player);
       this.updateCollision(player, array);
       array.push(player);
@@ -124,9 +125,6 @@ class MatchRoom extends Room {
   updatePlayer (clientId, player) {
     if (player.left !== -1) { this.state.players[ clientId ].left = player.left }
     if (player.right !== -1) { this.state.players[ clientId ].right = player.right }
-
-    // check collision with grass
-    this.track.collide(player)
 
     // only move player when it's game has started
     player.update()

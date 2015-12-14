@@ -36,6 +36,8 @@ export default class Leaderboard extends PIXI.Container {
     this.entries.addChild(new PIXI.Text("8. ", textConfig))
     this.entries.addChild(new PIXI.Text("9. ", textConfig))
     this.entries.addChild(new PIXI.Text("10. ", textConfig))
+
+    this.update()
   }
 
   update () {
@@ -61,8 +63,6 @@ export default class Leaderboard extends PIXI.Container {
         entry.visible = false
       }
     })
-
-    console.log("update", top10)
   }
 
 }
