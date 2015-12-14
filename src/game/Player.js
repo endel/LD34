@@ -84,11 +84,11 @@ export default class Player extends Entity {
     var wt = new WaterTrail();
     this.trail = new ParticleSystem(200, wt.texture);
     this.particles.addChild(this.trail);
-    this.trail.alpha = 0.05;
+    this.trail.alpha = 0.03;
     this.trail.params.life = 60;
-    this.trail.params.scaleX = 0.2;
+    this.trail.params.scaleX = 0.25;
     this.trail.params.scaleY = 0.5;
-    this.trail.params.growthX = 0.01;
+    this.trail.params.growthX = 0.005;
     this.trail.params.growthY = 0.02;
   }
 
@@ -170,7 +170,7 @@ export default class Player extends Entity {
       this.emitCircles(ox, oy);
     }
 
-    this.trail.params.life = 40*this.movementRange;
+    this.trail.params.life = 5 + 60*this.movementRange;
     this.trail.params.angle = this.entity.rotation;
     this.trail.params.x = this.position.x;
     this.trail.params.y = this.position.y;
