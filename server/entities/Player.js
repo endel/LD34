@@ -1,12 +1,17 @@
 'use strict';
 
 var math = require('../utils/math')
+var Lap = require('./Lap')
 
-class Player {
+var EventEmitter = require('events').EventEmitter
+
+class Player extends EventEmitter {
 
   constructor (spawnPosition) {
-    // player started running?
-    this.started = false
+    super();
+    this.lap = new Lap()
+    this.lapCount = 0
+    this.bestLap = null
 
     this.position = { x: spawnPosition.x, y: spawnPosition.y }
     this.rotation = spawnPosition.rotation;
@@ -15,10 +20,26 @@ class Player {
     this.accelerationX = 0;
     this.accelerationY = 0;
     this.torque = 0;
-    this.laps = []
 
     this._left = 0
     this._right = 0
+
+    this.on('lap-complete', this.onLapComplete.bind(this))
+  }
+
+  start () {
+    this.startTime = Date.now()
+  }
+
+  onLapComplete () {
+    var lapTime = Date.now() - this.startTime
+
+    if ((this.bestLap || Number.MAX_VALUE) > lapTime) {
+      this.bestLap = lapTime
+    }
+
+    this.startTime = Date.now()
+    this.lapCount++
   }
 
   set left (left) {

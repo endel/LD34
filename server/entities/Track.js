@@ -15,7 +15,11 @@ class Track {
   constructor(track) {
     this.cols = track.cols
     this.tileSize = track.tileSize
+
     this.map = track.map
+    this.checkpoints = track.checkpoints
+    this.lastCheckpoint = Math.max.apply(null, this.checkpoints)
+
     this.chunks = track.chunks
     this.size = this.tileSize * chunkSize;
 
@@ -34,10 +38,6 @@ class Track {
         }
       }
 
-      // var quad = new Quad(color, size, size, 0, 0);
-      // this.base.addChild(quad);
-      // quad.position.x = px*size;
-      // quad.position.y = py*size;
     }
   }
 
@@ -45,14 +45,25 @@ class Track {
     var currentTileX = Math.floor(player.position.x / this.size)
       , currentTileY = Math.floor(player.position.y / this.size)
       , currentTile = this.map[ (this.cols * currentTileY) + currentTileX ]
+      , currentCheckpoint = this.checkpoints[ (this.cols * currentTileY) + currentTileX ]
 
       , nextPlayerPosition = player.getNextPosition()
       , nextTileX = Math.floor(nextPlayerPosition.x / this.size)
       , nextTileY = Math.floor(nextPlayerPosition.y / this.size)
       , nextTile = this.map[ (this.cols * nextTileY) + nextTileX ]
 
+    // check lap completion (through checkpoints)
+    if (currentCheckpoint !== 0) {
+      if (player.lap.checkpoint(currentCheckpoint) &&
+          currentCheckpoint === this.lastCheckpoint &&
+          player.lap.validate(this.lastCheckpoint)) {
+        player.lap.clear()
+        player.emit('lap-complete')
+      }
+    }
+
     // prevent from colliding with grass
-    if (nextTile === 0) {
+    if (nextTile === 0 && currentTile !== 0) {
       player.accelerationX /= 1.3
       player.accelerationY /= 1.3
 
@@ -62,7 +73,12 @@ class Track {
       } else if (nextTileY !== currentTileY) {
         player.accelerationY = 0
       }
+
+    } else if (currentTile === 0) {
+      player.accelerationX /= 1.3
+      player.accelerationY /= 1.3
     }
+
   }
 
 }
