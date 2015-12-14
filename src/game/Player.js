@@ -15,6 +15,8 @@ export default class Player extends Entity {
     this.entity = new Entity()
     this.addChild(this.entity)
 
+    this.bestLap = data.bestLap
+    this.lapCount = data.lapCount
     this.position.x = this.targetX = data.targetX
     this.position.y = this.targetY = data.targetY
     this.lastPosition = {x:this.position.x, y:this.position.y};

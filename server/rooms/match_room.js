@@ -53,9 +53,6 @@ class MatchRoom extends Room {
   }
 
   onLapCompleted (client, player) {
-    this.clock.currentTime
-    player.
-    player.startTime = this.clock.currentTime
     // Leaderboard.insert(client.id, this.roomName, this.state.players[ client.id ].name, 10000)
   }
 
