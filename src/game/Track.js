@@ -8,6 +8,7 @@ var chunkSize = 9;
 export default class Track {
 
   constructor() {
+    this.base = new PIXI.Container();
     this.water = new PIXI.Container();
     this.grass = new PIXI.Container();
   }
@@ -24,6 +25,13 @@ export default class Track {
       var px = Math.floor(i%cols);
       var py = Math.floor(i/cols);
       var quad = null;
+
+      quad = new Water();
+      quad.width = size;
+      quad.height = size;
+      this.base.addChild(quad);
+      quad.position.x = px*size;
+      quad.position.y = py*size;
 
       if (type) {
         quad = new Water();

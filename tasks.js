@@ -32,6 +32,7 @@ async function clean() {
 async function copy() {
   fs.ensureDirSync('release');
   fs.copySync('res/html/index.html', 'release/index.html');
+  fs.copySync('res/images', 'release/images');
 }
 
 async function css() {
@@ -67,6 +68,7 @@ async function watch() {
   var cmdServer = 'http-server release -p 8080 -s';
   watchDir('res/atlas', atlas);
   watchDir('res/html', copy);
+  watchDir('res/images', copy);
   shell.exec(`${cmdJs} & ${cmdCss} & ${cmdServer}`, {async:true});
 }
 

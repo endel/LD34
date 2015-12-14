@@ -48,8 +48,9 @@ export default class Game extends PIXI.Container {
   onSetup (data) {
     this.track = new Track();
     this.track.setup(data.map)
-    this.world.add(this.track.water, 0);
-    this.world.add(this.track.grass, 2);
+    this.world.add(this.track.base, 0);
+    this.world.add(this.track.water, 1);
+    this.world.add(this.track.grass, 3);
 
     // this.loadMap(data.map)
     if (data.players) {
@@ -84,12 +85,12 @@ export default class Game extends PIXI.Container {
   addEntity (entity) {
     console.log("Add entity!")
     if (entity.particles) {
-      this.world.add(entity.particles, 1);
+      this.world.add(entity.particles, 2);
     }
+    this.world.add(entity, 3);
     if (entity.playerName) {
       this.world.add(entity.playerName, 4);
     }
-    this.world.add(entity, 3);
   }
 
   addNewPlayer (clientId, data) {
