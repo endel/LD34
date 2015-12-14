@@ -28,8 +28,8 @@ export default class Player extends Entity {
       fill : 0xffffff,
       align : 'center'
     })
-    this.playerName.position.y = this.height + this.playerName.height + 10
-    this.addChild(this.playerName)
+    this.playerName.rotation = Math.PI/4;
+    this.playerName.anchor.set(0.5);
 
     this.name = data.name || "Guest 1"
 
@@ -40,6 +40,12 @@ export default class Player extends Entity {
     this.right = 0;
     this.leftAct = false;
     this.rightAct = false;
+  }
+
+  dispose() {
+    if (this.particles && this.particles.parent) {
+      this.particles.parent.removeChild(this.particles);
+    }
   }
 
   createView() {
@@ -180,6 +186,12 @@ export default class Player extends Entity {
 
     this.lastPosition.x = this.position.x;
     this.lastPosition.y = this.position.y;
+
+
+    var dist = 30;
+    this.playerName.position.x = this.position.x - dist;
+    this.playerName.position.y = this.position.y + dist;
+
   }
 
   emitCircles(ox, oy) {
