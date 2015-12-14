@@ -8,7 +8,12 @@ export default class Network extends EventEmitter {
   constructor (players) {
     super()
 
-    this.colyseus = new Colyseus(`ws://${ location.hostname }:3553`)
+    if (location.hostname.match(/\.com/)) {
+      this.colyseus = new Colyseus(`ws://${ location.hostname }`)
+    } else {
+      this.colyseus = new Colyseus(`ws://${ location.hostname }:3553`)
+    }
+
     this.players = players
 
     // Read room name from query string
