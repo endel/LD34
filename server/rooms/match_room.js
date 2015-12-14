@@ -7,6 +7,7 @@ var Room = require('colyseus').Room
   , Player = require('../entities/Player')
   , Track = require('../entities/Track')
   , chunks = require('../data/chunks')
+  , math = require('../utils/math')
 
 const TICK_RATE = 30
     , PATCH_RATE = 20
@@ -86,14 +87,38 @@ class MatchRoom extends Room {
   tick () {
     // update game logic
     this.clock.tick()
+    var array = [];
 
     for (var clientId in this.players) {
-      this.updatePlayer(clientId, this.players[clientId])
+      var player = this.players[clientId];
+      this.updatePlayer(clientId, player);
+      this.updateCollision(player, array);
+      array.push(player);
     }
   }
 
   update () {
     this.broadcast()
+  }
+
+  updateCollision(a, array) {
+    for (var i in array) {
+      var b = array[i];
+      var ax = a.position.x;
+      var ay = a.position.y;
+      var bx = b.position.x;
+      var by = b.position.y;
+      var distance = math.distance(ax, ay, bx, by);
+      if (distance < 32) {
+        var angle = Math.atan2(ay - by, ax - bx);
+        var fx = Math.cos(angle)*5;
+        var fy = Math.sin(angle)*5;
+        a.force.x += fx;
+        a.force.y += fy;
+        b.force.x -= fx;
+        b.force.y -= fy;
+      }
+    }
   }
 
   updatePlayer (clientId, player) {

@@ -11,8 +11,12 @@ export default class Game extends PIXI.Container {
   constructor() {
     super();
 
+    this.container = new PIXI.Container();
+    this.addChild(this.container);
+    this.container.rotation = -Math.PI/4;
+
     this.world = new PIXI.Container();
-    this.addChild(this.world);
+    this.container.addChild(this.world);
 
     this.camera = new Camera();
     this.entities = [];
