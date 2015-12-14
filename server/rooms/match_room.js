@@ -34,25 +34,28 @@ class MatchRoom extends Room {
   }
 
   requestJoin (options) {
-    return ( this.clients.length < 10 )
+    return ( this.clients.length < 20 )
   }
 
   onJoin (client, options) {
     console.log(client.id, 'joined')
 
     this.players[ client.id ] = new Player(this.track.spawnPosition)
+    this.players[ client.id ].on('lap-completed', this.onLapCompleted.bind(this, client, this.players[ client.id ]))
+
     this.state.players[ client.id ] = {
       name: `Guest ${ this.clients.length }`
     }
-    this.updatePlayer(client.id, this.players[ client.id ])
 
-    // TODO: remove me
-    this.players[ client.id ].lapInterval = this.clock.setInterval(this.logUserLap.bind(this, client), 10000)
+    this.updatePlayer(client.id, this.players[ client.id ])
 
     this.sendState(client)
   }
 
-  logUserLap (client) {
+  onLapCompleted (client, player) {
+    this.clock.currentTime
+    player.
+    player.startTime = this.clock.currentTime
     // Leaderboard.insert(client.id, this.roomName, this.state.players[ client.id ].name, 10000)
   }
 
@@ -65,8 +68,7 @@ class MatchRoom extends Room {
 
     } else if (key == 'start') {
       // set player start time
-      this.players[ client.id ].started = true
-      this.players[ client.id ].startTime = this.clock.currentTime
+      this.players[ client.id ].start()
       this.send(client, 'start')
 
     } else if (typeof(key)==="number" && typeof(value)==="number") {
@@ -110,6 +112,8 @@ class MatchRoom extends Room {
     // only move player when it's game has started
     player.update()
 
+    this.state.players[ clientId ].lapCount = player.lapCount
+    this.state.players[ clientId ].bestLap = player.bestLap
     this.state.players[ clientId ].targetX = player.position.x
     this.state.players[ clientId ].targetY = player.position.y
     this.state.players[ clientId ].targetAngle = player.rotation
