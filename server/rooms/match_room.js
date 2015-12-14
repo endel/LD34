@@ -81,9 +81,6 @@ class MatchRoom extends Room {
   onLeave (client) {
     console.log(client.id, "leaved")
 
-    // TODO: remove me
-    this.players[ client.id ].lapInterval.clear()
-
     // remove player references
     delete this.state.players[ client.id ]
     delete this.players[ client.id ]
