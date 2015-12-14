@@ -23,11 +23,7 @@ export default class Player extends Entity {
     this.movementRange = 0;
     this.entity.rotation = this.targetAngle = (data.targetAngle || 0);
 
-    this.playerName = new PIXI.Text("", {
-      font : '14px Arial',
-      fill : 0xffffff,
-      align : 'center'
-    })
+    this.playerName = new PIXI.Text("", PLAYER_FONT, 3)
     this.playerName.rotation = Math.PI/4;
     this.playerName.anchor.set(0.5);
 

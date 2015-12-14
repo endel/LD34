@@ -33,12 +33,9 @@ export default class Game extends PIXI.Container {
     this.leaderboard.y = -stage.height/2;
     this.addChild(this.leaderboard)
 
-    this.lapTime = new PIXI.Text("0:00", {
-      font : '14px Arial',
-      fill : 0xffffff,
-      align : 'center'
-    })
-    this.lapTime.y = -stage.height/2 + 20;
+    this.lapTime = new PIXI.Text("0:00", DEFAULT_FONT, 3)
+    this.lapTime.y = -stage.height/2 + 10;
+    this.lapTime.x = -stage.width/2 + 10;
     this.addChild(this.lapTime)
 
     this.keysDirty = false
@@ -119,7 +116,6 @@ export default class Game extends PIXI.Container {
     }
 
     if (this.keysDirty) {
-      console.log("send keys:", this.keys)
       this.network.send(this.keys)
       this.keysDirty = false
     }

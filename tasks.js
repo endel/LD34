@@ -35,6 +35,7 @@ async function copy() {
   fs.ensureDirSync('release');
   fs.copySync('res/html/index.html', 'release/index.html');
   fs.copySync('res/images', 'release/images');
+  fs.copySync('res/fonts', 'release/fonts');
 }
 
 async function audio () {
@@ -82,6 +83,7 @@ async function watch() {
   watchDir('res/atlas', atlas);
   watchDir('res/html', copy);
   watchDir('res/images', copy);
+  watchDir('res/fonts', copy);
   shell.exec(`${cmdJs} & ${cmdCss} & ${cmdServer}`, {async:true});
 }
 

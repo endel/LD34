@@ -1,22 +1,20 @@
 export default class Leaderboard extends PIXI.Container {
 
-  constructor (players, width = 120, height = 200) {
+  constructor (players, width = 200) {
     super();
 
     this.players = players
 
-    this.margin = 6;
+    this.margin = 10;
 
     this.bg = new PIXI.Graphics()
     this.bg.beginFill(0x000000)
-    this.bg.drawRect(0, 0, width, height)
+    this.bg.drawRect(0, 0, width, 200)
     this.bg.endFill()
     this.bg.alpha = 0.6
     this.addChild(this.bg)
 
-    var textConfig = { font : '14px Arial', fill : 0xffffff, align : 'left' }
-
-    this.title = new PIXI.Text("Leaderboard", textConfig)
+    this.title = new PIXI.Text("Leaderboard", DEFAULT_FONT, 3)
     this.title.x = this.margin
     this.title.y = this.margin
     this.addChild(this.title)
@@ -26,16 +24,16 @@ export default class Leaderboard extends PIXI.Container {
     this.entries.y = this.title.y + this.title.height + this.margin
     this.addChild(this.entries)
 
-    this.entries.addChild(new PIXI.Text("1. ", textConfig))
-    this.entries.addChild(new PIXI.Text("2. ", textConfig))
-    this.entries.addChild(new PIXI.Text("3. ", textConfig))
-    this.entries.addChild(new PIXI.Text("4. ", textConfig))
-    this.entries.addChild(new PIXI.Text("5. ", textConfig))
-    this.entries.addChild(new PIXI.Text("6. ", textConfig))
-    this.entries.addChild(new PIXI.Text("7. ", textConfig))
-    this.entries.addChild(new PIXI.Text("8. ", textConfig))
-    this.entries.addChild(new PIXI.Text("9. ", textConfig))
-    this.entries.addChild(new PIXI.Text("10. ", textConfig))
+    this.entries.addChild(new PIXI.Text("1. ", DEFAULT_FONT, 3))
+    this.entries.addChild(new PIXI.Text("2. ", DEFAULT_FONT, 3))
+    this.entries.addChild(new PIXI.Text("3. ", DEFAULT_FONT, 3))
+    this.entries.addChild(new PIXI.Text("4. ", DEFAULT_FONT, 3))
+    this.entries.addChild(new PIXI.Text("5. ", DEFAULT_FONT, 3))
+    this.entries.addChild(new PIXI.Text("6. ", DEFAULT_FONT, 3))
+    this.entries.addChild(new PIXI.Text("7. ", DEFAULT_FONT, 3))
+    this.entries.addChild(new PIXI.Text("8. ", DEFAULT_FONT, 3))
+    this.entries.addChild(new PIXI.Text("9. ", DEFAULT_FONT, 3))
+    this.entries.addChild(new PIXI.Text("10. ", DEFAULT_FONT, 3))
 
     this.update()
   }

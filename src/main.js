@@ -7,6 +7,9 @@ var stage;
 var game;
 var keyNameMap;
 
+window.DEFAULT_FONT = { font : '12px BitBold', fill : 0xffffff, align : 'left' }
+window.PLAYER_FONT = { font : '12px BitBold', fill : 0xffffff, align : 'center' }
+
 init();
 
 function init() {
