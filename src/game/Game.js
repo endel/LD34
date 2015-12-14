@@ -75,6 +75,9 @@ export default class Game extends PIXI.Container {
 
   addEntity (entity) {
     console.log("Add entity!")
+    if (entity.particles) {
+      this.world.addChild(entity.particles);
+    }
     this.world.addChild(entity);
     // this.entities.push(entity);
   }

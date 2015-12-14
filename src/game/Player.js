@@ -4,6 +4,8 @@ import Boat from '../bitmap/Boat';
 import Hat from '../bitmap/Hat';
 import Paddle from '../bitmap/Paddle';
 import WaterTrail from '../bitmap/WaterTrail';
+import ParticleSystem from './ParticleSystem';
+import * as math from '../tools/math';
 
 export default class Player extends Entity {
   constructor(data) {
@@ -14,6 +16,8 @@ export default class Player extends Entity {
 
     this.position.x = this.targetX = data.targetX
     this.position.y = this.targetY = data.targetY
+    this.lastPosition = {x:this.position.x, y:this.position.y};
+    this.movementRange = 0;
     this.entity.rotation = this.targetAngle = (data.targetAngle || 0);
 
     this.playerName = new PIXI.Text("", {
@@ -58,16 +62,14 @@ export default class Player extends Entity {
     this.hat = new Hat();
     this.char.addChild(this.hat);
     this.hatPosition = {x:0, y:0};
-  }
 
-  createParticles() {
-    this.trail = new Container();
-    container.addChild(this.trail);
-    var i = 20;
-    while (i--) {
-      var wt = new WaterTrail();
-      this.trail.addChild(wt);
-    }
+    this.particles = new PIXI.Container();
+
+    var wt = new WaterTrail();
+    this.trail = new ParticleSystem(200, wt.texture);
+    this.trail.params.life = 60;
+    this.trail.alpha = 0.05;
+    this.particles.addChild(this.trail);
   }
 
   set name (name) {
@@ -79,6 +81,7 @@ export default class Player extends Entity {
     this.position.x = lerp(this.position.x, this.targetX, this.ease);
     this.position.y = lerp(this.position.y, this.targetY, this.ease);
     this.entity.rotation = lerp(this.entity.rotation || 0, this.targetAngle, this.ease);
+    this.movementRange = math.distance(this.position.x, this.position.y, this.lastPosition.x, this.lastPosition.y);
 
     if (this.left) {
       this.paddleRightAngle = Math.PI*0.25;
@@ -111,10 +114,19 @@ export default class Player extends Entity {
     this.hatPosition.x *= hatEase;
     this.hatPosition.y *= hatEase;
 
-    this.updateTrail();
-  }
+    if (this.movementRange > 1) {
+      this.trail.rate = 1;
+    } else {
+      this.trail.rate = 0;
+    }
 
-  updateTrail() {
+    this.trail.params.life = 40*this.movementRange;
+    this.trail.params.angle = this.entity.rotation;
+    this.trail.params.x = this.position.x;
+    this.trail.params.y = this.position.y;
+    this.trail.update(1);
 
+    this.lastPosition.x = this.position.x;
+    this.lastPosition.y = this.position.y;
   }
 }

@@ -2,11 +2,11 @@ import Bitmap from './Bitmap';
 import PIXI from 'pixi.js';
 
 var bitmap = new Bitmap();
-bitmap.tileSize = 10;
-bitmap.cols = 8;
+bitmap.tileSize = 8;
+bitmap.cols = 10;
 
 bitmap.map = [
-  1, 2, 0, 0, 0, 0, 2, 1
+  1, 0, 2, 0, 0, 0, 0, 1, 0, 2
 ];
 
 bitmap.colors = [
