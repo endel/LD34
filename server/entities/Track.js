@@ -41,26 +41,39 @@ class Track {
     }
   }
 
+  checkCheckpoints (player) {
+    var currentTileX = Math.floor(player.position.x / this.size)
+      , currentTileY = Math.floor(player.position.y / this.size)
+      , currentTile = this.map[ (this.cols * currentTileY) + currentTileX ]
+      , suroudingCheckpoints = [
+          this.checkpoints[ (this.cols * currentTileY) + currentTileX ], // self
+          this.checkpoints[ (this.cols * currentTileY-1) + currentTileX ], // top
+          this.checkpoints[ (this.cols * currentTileY) + currentTileX+1 ], // right
+          this.checkpoints[ (this.cols * currentTileY+1) + currentTileX ], // bottom
+          this.checkpoints[ (this.cols * currentTileY) + currentTileX-1 ], // left
+        ]
+
+    // check lap completion (through checkpoints)
+    suroudingCheckpoints.filter(c => c > 0).
+      forEach((checkpoint, i) => {
+      if (player.lap.checkpoint(checkpoint) &&
+          checkpoint === this.lastCheckpoint &&
+          player.lap.validate(this.lastCheckpoint)) {
+        player.lap.clear()
+        player.emit('lap-complete')
+      }
+    })
+  }
+
   collide(player) {
     var currentTileX = Math.floor(player.position.x / this.size)
       , currentTileY = Math.floor(player.position.y / this.size)
       , currentTile = this.map[ (this.cols * currentTileY) + currentTileX ]
-      , currentCheckpoint = this.checkpoints[ (this.cols * currentTileY) + currentTileX ]
 
       , nextPlayerPosition = player.getNextPosition()
       , nextTileX = Math.floor(nextPlayerPosition.x / this.size)
       , nextTileY = Math.floor(nextPlayerPosition.y / this.size)
       , nextTile = this.map[ (this.cols * nextTileY) + nextTileX ]
-
-    // check lap completion (through checkpoints)
-    if (currentCheckpoint !== 0) {
-      if (player.lap.checkpoint(currentCheckpoint) &&
-          currentCheckpoint === this.lastCheckpoint &&
-          player.lap.validate(this.lastCheckpoint)) {
-        player.lap.clear()
-        player.emit('lap-complete')
-      }
-    }
 
     // prevent from colliding with grass
     if (nextTile === 0 && currentTile !== 0) {

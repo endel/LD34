@@ -44,14 +44,14 @@ class Player extends EventEmitter {
   }
 
   set left (left) {
-    if (left !== this._left && left === 0) {
+    if (this.startTime && left !== this._left && left === 0) {
       this.impulse(1)
     }
     this._left = left
   }
 
   set right (right) {
-    if (right !== this._right && right === 0) {
+    if (this.startTime && right !== this._right && right === 0) {
       this.impulse(-1)
     }
     this._right = right

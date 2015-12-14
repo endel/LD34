@@ -31,6 +31,7 @@ function init() {
   }
 
   window.addEventListener('touchstart', onTouchStart);
+  window.addEventListener('touchend', onTouchEnd);
   window.addEventListener('keydown', onKeyDown);
   window.addEventListener('keyup', onKeyUp);
 
@@ -56,12 +57,19 @@ function onKeyUp(e) {
 
 function onTouchStart(e) {
   if (e.touches && e.touches[0]) {
-    if (0.5 < e.touches[0].clientX / window.innerWidth) {
-      game.keyUp("LEFT");
-    } else {
-      game.keyUp("RIGHT");
+    for (var i=0; i<e.touches.length; i++) {
+      if (0.5 < e.touches[i].clientX / window.innerWidth) {
+        game.keyDown("RIGHT");
+      } else {
+        game.keyDown("LEFT");
+      }
     }
   }
+}
+
+function onTouchEnd(e) {
+  game.keyUp("LEFT");
+  game.keyUp("RIGHT");
 }
 
 function render(time) {

@@ -119,6 +119,7 @@ export default class Game extends PIXI.Container {
     }
 
     if (this.keysDirty) {
+      console.log("send keys:", this.keys)
       this.network.send(this.keys)
       this.keysDirty = false
     }

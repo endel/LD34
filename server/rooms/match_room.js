@@ -91,7 +91,10 @@ class MatchRoom extends Room {
 
     for (var clientId in this.players) {
       var player = this.players[clientId];
+
       this.track.collide(player) // check collision with track
+      this.track.checkCheckpoints(player)
+
       this.updatePlayer(clientId, player);
       this.updateCollision(player, array);
       array.push(player);
