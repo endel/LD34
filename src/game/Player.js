@@ -76,7 +76,7 @@ export default class Player extends Entity {
     this.circles = new ParticleSystem(50, wc.texture);
     this.circles.rate = 0;
     this.particles.addChild(this.circles);
-    this.circles.alpha = 0.02;
+    this.circles.alpha = 0.03;
     this.circles.params.life = 100;
     this.circles.params.scaleX = 0.1;
     this.circles.params.scaleY = 0.1;
@@ -172,7 +172,8 @@ export default class Player extends Entity {
       this.emitCircles(ox, oy);
     }
 
-    this.trail.params.life = 1 + 50*this.movementRange;
+    var m = math.clamp(this.movementRange, 0, 3);
+    this.trail.params.life = 10 + 50*m;
     this.trail.params.angle = this.entity.rotation;
     this.trail.params.x = this.position.x;
     this.trail.params.y = this.position.y;
