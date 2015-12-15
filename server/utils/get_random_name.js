@@ -24,7 +24,7 @@ var i = 0
     'Jessie Redmann',
     'Joe Bob',
     'Ricky Maru',
-    'Tommy Clumpsy Fits'
+    'Tommy Clumpsy'
   ])
 
 
