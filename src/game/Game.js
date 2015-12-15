@@ -38,6 +38,12 @@ export default class Game extends PIXI.Container {
     this.lapTime.x = -stage.width/2 + 10;
     this.addChild(this.lapTime)
 
+    this.instructionText = new PIXI.Text("PRESS 'LEFT' and 'RIGHT' TO MOVE", PLAYER_FONT, 3)
+    this.instructionText.y = stage.height/2 - 100;
+    this.instructionText.x = -this.instructionText.width/2;
+    this.instructionText.alpha = 0
+    this.addChild(this.instructionText)
+
     this.keysDirty = false
     this.keys = [-1, -1]
   }
@@ -65,6 +71,25 @@ export default class Game extends PIXI.Container {
         , seconds = '0' + (elapsedSeconds - (minutes * 60))
       this.lapTime.text = `${ minutes }:${ seconds.substr(seconds.length - 2) }`
     }, 1000)
+
+    // mandraque tweener for instructions
+    // that's terrible, please refactor me
+    this.fadeInterval = clock.setInterval(() => {
+      if (this.instructionText.alpha < 1) {
+        this.instructionText.alpha += 0.05
+      } else {
+        this.fadeInterval.clear()
+        clock.setTimeout(() => {
+          this.fadeInterval = clock.setInterval(() => {
+            if (this.instructionText.alpha > 0) {
+              this.instructionText.alpha -= 0.05
+            } else {
+              this.fadeInterval.clear()
+            }
+          }, 1000 / 60)
+        }, 8000)
+      }
+    }, 1000 / 60)
   }
 
   onLapCompleted () {
