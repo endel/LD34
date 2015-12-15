@@ -14,6 +14,11 @@ export default class Network extends EventEmitter {
       this.colyseus = new Colyseus(`ws://${ location.hostname }:3553`)
     }
 
+    // remove loading
+    this.colyseus.onopen = function () {
+      document.querySelector('section.overlay').classList.remove('loading')
+    }
+
     this.players = players
 
     // Read room name from query string
