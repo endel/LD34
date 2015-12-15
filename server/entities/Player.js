@@ -106,9 +106,11 @@ class Player extends EventEmitter {
 		this.acceleration += 1;
 		this.accelerationX += 1;
 		this.accelerationY += 1;
-		this.acceleration = math.clamp(this.acceleration, -5, 5);
-		this.accelerationX = math.clamp(this.accelerationX, -5, 5);
-		this.accelerationY = math.clamp(this.accelerationY, -5, 5);
+
+    var clamp = 6;
+		this.acceleration = math.clamp(this.acceleration, -clamp, clamp);
+		this.accelerationX = math.clamp(this.accelerationX, -clamp, clamp);
+		this.accelerationY = math.clamp(this.accelerationY, -clamp, clamp);
 	}
 }
 
