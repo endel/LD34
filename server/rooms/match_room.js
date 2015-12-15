@@ -8,6 +8,7 @@ var Room = require('colyseus').Room
   , Track = require('../entities/Track')
   , chunks = require('../data/chunks')
   , math = require('../utils/math')
+  , get_random_name = require('../utils/get_random_name')
 
 const TICK_RATE = 30
     , PATCH_RATE = 20
@@ -45,7 +46,7 @@ class MatchRoom extends Room {
     this.players[ client.id ].on('lap-completed', this.onLapCompleted.bind(this, client, this.players[ client.id ]))
 
     this.state.players[ client.id ] = {
-      name: `Guest ${ this.clients.length }`
+      name: get_random_name()
     }
 
     this.updatePlayer(client.id, this.players[ client.id ])

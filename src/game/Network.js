@@ -87,7 +87,7 @@ export default class Network extends EventEmitter {
       } else if (patch.op==='remove' && patch.path.indexOf("/players/") === 0) {
         // on user disconnect
         let [_, clientId] = patch.path.match(/\/players\/(.*)/)
-        this.players[ clientId ].parent.removeChild(this.players[ clientId ])
+        this.players[ clientId ].disconnect()
       }
     })
   }

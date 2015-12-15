@@ -190,6 +190,11 @@ export default class Player extends Entity {
 
   }
 
+  disconnect () {
+    this.parent.removeChild(this)
+    this.playerName.parent.removeChild(this.playerName)
+  }
+
   emitCircles(ox, oy) {
     var r = 10;
     var i = 5;
