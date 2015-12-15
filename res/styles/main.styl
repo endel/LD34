@@ -4,17 +4,25 @@ body
   margin 0
   padding 0
   overflow hidden
+  background #000
 
 audio
   display none
 
 section.overlay
+  transition all 0.5s
   z-index 100
   position fixed
   width 100vw
   height 100vh
   background rgba(0,0,0,0.5)
   padding calc(40vh - 100px) 0
+
+  &.loading
+    cursor progress
+    padding calc(50vh - 100px) 0
+    form
+      opacity 0
 
   img
     display block
@@ -25,6 +33,8 @@ section.overlay
 
   form
     text-align center
+    transition opacity 0.2s
+    opacity 1
 
     input, button
       font-size 24px

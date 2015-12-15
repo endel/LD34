@@ -46,8 +46,7 @@ export default class Leaderboard extends PIXI.Container {
 
     var headerHeight = this.entries.y
     var top10 = values. // filter(player => player.lapCount > 0).
-      sort((a,b) => a.bestLap > b.bestLap).
-      sort((a,b) => b !== null). // place zero's at the end of the list
+      sort((a,b) => (b.bestLap === 0 || a.bestLap === 0)  ? true : a.bestLap > b.bestLap).
       slice(0, 10)
 
     this.bg.height = headerHeight + this.margin + top10.length * this.entries.children[0].height
