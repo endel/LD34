@@ -19,7 +19,7 @@ var i = 0
     'Cletus Lee',
     'Earl Springs',
     'Floyd 4Fingers',
-    'George John Paul',
+    'George John',
     'Harley Hell',
     'Jessie Redmann',
     'Joe Bob',

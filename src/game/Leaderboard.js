@@ -1,6 +1,6 @@
 export default class Leaderboard extends PIXI.Container {
 
-  constructor (players, width = 200) {
+  constructor (players, width = 210) {
     super();
 
     this.players = players
