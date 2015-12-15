@@ -172,7 +172,7 @@ export default class Player extends Entity {
       this.emitCircles(ox, oy);
     }
 
-    this.trail.params.life = 5 + 60*this.movementRange;
+    this.trail.params.life = 1 + 50*this.movementRange;
     this.trail.params.angle = this.entity.rotation;
     this.trail.params.x = this.position.x;
     this.trail.params.y = this.position.y;
@@ -192,12 +192,12 @@ export default class Player extends Entity {
 
   emitCircles(ox, oy) {
     var r = 10;
-    var i = 8;
+    var i = 5;
     while (i--) {
       var sc = 0.05 + Math.random()*0.2;
       this.circles.params.scaleX = sc;
       this.circles.params.scaleY = sc;
-      this.circles.params.life = 30 + Math.random()*100;
+      this.circles.params.life = 30 + Math.random()*80;
       this.circles.params.x = this.position.x + ox + (Math.random()*r - r/2);
       this.circles.params.y = this.position.y + oy + (Math.random()*r - r/2);
       this.circles.emit();
