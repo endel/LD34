@@ -11,19 +11,18 @@ var Room = require('colyseus').Room
   , get_random_name = require('../utils/get_random_name')
 
 const TICK_RATE = 30
-    , PATCH_RATE = 20
 
 class MatchRoom extends Room {
 
   constructor (options) {
-    options.updateInterval = 1000 / PATCH_RATE
+    super(options)
 
     // Send cols as first element in MAP array
     var map = options.track.map.slice(0) // clone array
     map.unshift(options.track.tileSize)
     map.unshift(options.track.cols)
 
-    super(options, {
+    this.setState({
       map: map,
       players: {}
     })
@@ -100,10 +99,6 @@ class MatchRoom extends Room {
       this.updateCollision(player, array);
       array.push(player);
     }
-  }
-
-  update () {
-    this.broadcast()
   }
 
   updateCollision(a, array) {

@@ -9,7 +9,13 @@ export default class Network extends EventEmitter {
     super()
 
     if (location.hostname.match(/\.com/)) {
-      this.colyseus = new Colyseus(`ws://${ location.hostname }`)
+      var protocol = location.protocol.replace('http', 'ws')
+      this.colyseus = new Colyseus(protocol + '//' + location.hostname);
+
+    } else if (location.hostname.match(/\.zone/)) {
+      var protocol = location.protocol.replace('http', 'ws')
+      this.colyseus = new Colyseus(protocol + '//redneck-river-race.herokuapp.com');
+
     } else {
       this.colyseus = new Colyseus(`ws://${ location.hostname }:3553`)
     }

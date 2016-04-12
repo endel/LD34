@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "clock-timer.js": "^1.0.0",
-    "colyseus.js": "^0.1.8",
+    "colyseus.js": "^0.2.0",
     "keycode.js": "0.0.1",
     "lerp": "^1.0.3",
     "pixi.js": "^3.0.8",
